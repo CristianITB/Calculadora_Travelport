@@ -13,39 +13,36 @@
 			<h1>Project: <span>Calculator</span></h1>
 		</header>
 		<div id="calculatorContainer">
-			<form id="calculator">
 
-				<input type="text" id="calculatorDisplay">
-					<!--
-					<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
-					-->
-					<button type="button" class="calculatorButtons" id="one" value="1" onclick="takeValue(document.getElementById('one').value)">1</button>
-					<button type="button" class="calculatorButtons" id="two" value="2" onclick="takeValue(document.getElementById('two').value)">2</button>
-					<button type="button" class="calculatorButtons" id="three" value="3" onclick="takeValue(document.getElementById('three').value)">3</button>
-					<button type="button" class="operators calculatorButtons" value="+" onclick="takeValue(this.value)">+</button>
+			<input type="text" id="calculatorDisplay">
+			<!--
+			<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
+			-->
+			<button id="one" value="1" onclick="takeValue(document.getElementById('one').value)">1</button>
+			<button id="two" value="2" onclick="takeValue(document.getElementById('two').value)">2</button>
+			<button id="three" value="3" onclick="takeValue(document.getElementById('three').value)">3</button>
+			<button class="operators" value="+" onclick="takeValue(this.value)">+</button>
 
-					<button type="button" class="calculatorButtons" id="four" value="4" onclick="takeValue(document.getElementById('four').value)">4</button>
-					<button type="button" class="calculatorButtons" id="five" value="5" onclick="takeValue(document.getElementById('five').value)">5</button>
-					<button type="button" class="calculatorButtons" id="six" value="6" onclick="takeValue(document.getElementById('six').value)">6</button>
-					<button type="button" class="operators calculatorButtons" value="-" onclick="takeValue(this.value)">-</button>
+			<button id="four" value="4" onclick="takeValue(document.getElementById('four').value)">4</button>
+			<button id="five" value="5" onclick="takeValue(document.getElementById('five').value)">5</button>
+			<button id="six" value="6" onclick="takeValue(document.getElementById('six').value)">6</button>
+			<button class="operators" value="-" onclick="takeValue(this.value)">-</button>
 
-					<button type="button" class="calculatorButtons" id="seven" value="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
-					<button type="button" class="calculatorButtons" id="eight" value="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
-					<button type="button" class="calculatorButtons" id="nine" value="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
-					<button type="button" class="operators calculatorButtons" value="*" onclick="takeValue(this.value)">*</button>
+			<button id="seven" value="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
+			<button id="eight" value="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
+			<button id="nine" value="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
+			<button class="operators" value="*" onclick="takeValue(this.value)">*</button>
 
-					<button type="button" class="calculatorButtons" id="zero" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
-					<button type="button" class="calculatorButtons" id="decimal" value="." onclick="takeValue(document.getElementById('decimal').value)">.</button>
-					<button type="button" class="calculatorButtons" id="clearButton" value="" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
-					<button type="button" class="operators calculatorButtons" value="/" onclick="takeValue(this.value)">/</button>
-					
-					<button type="button" class="calculatorButtons" id="equalButton" value="=" onclick="calculateResult()">=</button>
-				
-			</form>
+			<button id="zero" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
+			<button id="decimal" value="." onclick="takeValue(document.getElementById('decimal').value)">.</button>
+			<button id="clearButton" value="" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
+			<button class="operators" value="/" onclick="takeValue(this.value)">/</button>
+			
+			<button id="equalButton" value="=" onclick="calculateResult()">=</button>
+
 		</div>
 	</body>
 </html>
 
-<!-- If i remove: type="button", the browser refreshes everytime that I click on it-->
-<!-- Change input text, and maybe change input type button to just button -->
+<!-- Change input text calculatorDisplay?? -->
 
