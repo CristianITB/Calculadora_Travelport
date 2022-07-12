@@ -14,7 +14,7 @@
 		</header>
 		<div id="calculatorContainer">
 
-			<input type="text" id="calculatorDisplay">
+			<input type="text" id="calculatorDisplay" value="0">
 			<!--
 			<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
 			-->
@@ -35,7 +35,7 @@
 
 			<button id="zero" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
 			<button id="decimal" value="." onclick="takeValue(document.getElementById('decimal').value)">.</button>
-			<button id="clearButton" value="" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
+			<button id="clearButton" value="0" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
 			<button class="operators" value="/" onclick="takeValue(this.value)">/</button>
 			
 			<button id="equalButton" value="=" onclick="calculateResult()">=</button>

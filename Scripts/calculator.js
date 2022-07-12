@@ -1,5 +1,11 @@
 function takeValue(x) {
-	document.getElementById('calculatorDisplay').value += x;
+	let display = document.getElementById('calculatorDisplay')
+	if(display.value == "0"){
+		display.value = "";
+		display.value += x
+	} else{
+		display.value += x
+	}
 }
 
 function clearInput(x) {

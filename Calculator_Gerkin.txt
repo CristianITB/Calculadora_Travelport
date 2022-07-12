@@ -1,6 +1,9 @@
 Feature:  Calculator
 
-Background: GIVEN a user with the app opened
+Background: GIVEN a user with the app opened and a clear display
+
+
+iniciar con 0 y dp de clear tbien
 
  Scenario Outline: introducing a number
  
@@ -148,4 +151,27 @@ Background: GIVEN a user with the app opened
    Given I am in the calculator
    When I press = button
    Then It show a 0
+
+
+   Scenario: When I start the calculator
+
+   Given I'm on the calculator
+   When I dont click any button
+   Then In the result-screen should be a 0 as a placeholder
+
+
+   Scenario outline: Writing negative number for the second number
+   Given I have a clear screen
+   When I input the first number <firstNumber>
+   And I press the operation <operation>
+   And I press the minus sign
+   And I input the second number <secondNumber>
+   Then I obtain the result <result>
    
+   Examples:
+   
+   |firstNumber|operation|secondNumber|result|
+   |	  13   |    *    |     -7     |  -91 |
+   |	  13   |    +    |     -7     |    6 |
+   |	  13   |    -    |     -7     |   21 |
+   |	  21   |    /    |     -7     |   -3 |
