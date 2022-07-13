@@ -6,6 +6,7 @@
 		<meta name="autor" content="Cristian Jiménez">
 		<link rel="icon" href="Resources/CalculatorIcon.png">
 		<link href="Styles/calculator.css" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<script src="Scripts/calculator.js"></script>
 	</head>
 	<body>
@@ -15,29 +16,35 @@
 		<div id="calculatorContainer">
 
 			<input type="text" id="calculatorDisplay" value="0">
+			<i id="backSpace" onclick="deleteCharacter()" class="material-icons">backspace</i>
+
 			<!--
 			<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
 			-->
 			<button id="one" value="1" onclick="takeValue(document.getElementById('one').value)">1</button>
 			<button id="two" value="2" onclick="takeValue(document.getElementById('two').value)">2</button>
 			<button id="three" value="3" onclick="takeValue(document.getElementById('three').value)">3</button>
+			<button class="operators" value="+" onclick="highlightOperator(event)">+</button>
+			<!--
 			<button class="operators" value="+" onclick="takeValue(this.value)">+</button>
+			-->
 
 			<button id="four" value="4" onclick="takeValue(document.getElementById('four').value)">4</button>
 			<button id="five" value="5" onclick="takeValue(document.getElementById('five').value)">5</button>
 			<button id="six" value="6" onclick="takeValue(document.getElementById('six').value)">6</button>
-			<button class="operators" value="-" onclick="takeValue(this.value)">-</button>
+			<button class="operators" value="-" onclick="highlightOperator(event)">-</button>
 
 			<button id="seven" value="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
 			<button id="eight" value="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
 			<button id="nine" value="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
-			<button class="operators" value="*" onclick="takeValue(this.value)">*</button>
+			<button class="operators" value="*" onclick="highlightOperator(event)">*</button>
 
 			<button id="zero" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
-			<button id="decimal" value="." onclick="takeValue(document.getElementById('decimal').value)">.</button>
-			<button id="clearButton" value="0" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
-			<button class="operators" value="/" onclick="takeValue(this.value)">/</button>
+			<button id="decimal" value="." onclick="addComa()">.</button>
+			<button class="operators" onclick="changeSign()">+/-</button>
+			<button class="operators" value="/" onclick="highlightOperator(event)">/</button>
 			
+			<button id="clearButton" value="0" onclick="clearInput(document.getElementById('clearButton').value)">Clear</button>
 			<button id="equalButton" value="=" onclick="calculateResult()">=</button>
 
 		</div>

@@ -40,9 +40,22 @@ h1 span{
 	cursor: pointer;
 }
 
+#backSpace{
+	background-color: black;
+	padding: 0;
+	font-size: 50.5px; 
+	color: grey;
+	cursor: pointer;
+	transition: all .5s;
+}
+
+#backSpace:hover{
+	color: rgb(186, 179, 179);
+}
+
 #calculatorDisplay{
 	height: 3.125rem;
-	width: 100%;
+	width: 74.5%;
 	background-color: #999;
 	color: #fff;
 	padding: 0.75rem 1.25rem;
@@ -52,11 +65,13 @@ h1 span{
     border-radius: 4px;
     border: 1px solid #777;
 	transition: all .5s;
+	text-align: right;
 }
+
 
 #calculatorContainer #equalButton{
 	height: 3.125rem;
-	width: 13.375rem;
+	width: 6.500rem;
 	background-color: #fd7202;
 	color: #fff;
 	border: 1px solid #fd7202;
@@ -67,6 +82,7 @@ h1 span{
 }
 
 #calculatorContainer #clearButton{
+	width: 6.500rem;
 	background-color: red;
 	color: #fff;
 	border: 1px solid red;
@@ -80,7 +96,7 @@ h1 span{
 }
 
 #calculatorContainer .operators{
-	background-color: green;
+	background-color: var(--operator-color);
 	color: #fff;
 	border: 1px solid green;
 }
@@ -88,4 +104,12 @@ h1 span{
 #calculatorContainer .operators:hover{
 	font-size: 1.1em;
 	background-color: rgb(16, 180, 16);
+}
+
+:root{
+	--operator-color: green;
+}
+
+.highlightOperator{
+	--operator-color: rgb(16, 180, 16);
 }

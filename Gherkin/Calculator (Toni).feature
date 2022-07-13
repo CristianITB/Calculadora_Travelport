@@ -9,7 +9,7 @@ Then in the display screen should be show a 0
 Scenario Outline: Clicking non-operators screen buttons
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the <Button> button
-Then in the display screen should be show a <Button>
+Then in the display screen should be show a <resultDisplay>
 
 Examples:
 |numberOnScreen|Button| resultDisplay |
@@ -28,15 +28,24 @@ Examples:
 |             1| +/-  |           -1  |
 
 Scenario Outline: Clicking operators screen buttons
-When the user press the <Button> button
-Then the <Button> button should be highlighted
+When the user press the <button> button
+Then just the operator <button> button should be highlighted 
 
 Examples:
-|Button|
+|button|
 |   +  |
 |   -  |
 |   /  |
 |   *  |
+
+Scenario Outline: Unhighlighting operators screen buttons
+When the user press the <button> button
+Then all the operators buttons should be unhighlighted
+
+Examples:
+|button|
+|   =  |
+|   C  |
 
 Scenario Outline: Pressing non-operators keys
 Given in the display screen the number <numberOnScreen> is shown
@@ -57,9 +66,8 @@ Examples:
 |             0|   9  |             9 |
 |             0|   ,  |            0, |
 |             1|  ESC |             0 |
-
-|             1|   -  |            1  | *****************************************************
-|            -1|   +  |            -1  |
+|            -1|  Ctrl|             1 |
+|             1|  Ctrl|            -1 |
 
 Scenario Outline: Pressing operators keys
 When the user press the <Key> key
@@ -91,17 +99,61 @@ Examples:
 |             0| +/-  |           0 |
 |             7| +/-  |          -7 |
 |          1234| +/-  |        -1234|
+|         -1234| +/-  |         1234|
 
 Scenario Outline: Writing more than 10 digits
-Given in the display screen the number 9999999999 is shown
-When the user press <Action>
-Then in the display screen should be show a 9999999999
+Given in the display screen the number <numberOnScreen> is shown
+When the user presses <Action>
+Then in the display screen should be shown <resultDisplay>
 
 Examples:
-|Action| 
-| 7    |
-| ,    |
-| +/-  |
+|numberOnScreen| Action |resultDisplay|
+|    1234567890|    7   |   1234567890|
+|    1234567890|   +/-  |  -1234567890|
+|    1234567890|    ,   |   1234567890|
+|     123456789|    ,   |   123456789,|
+|    123456789,|    5   |  123456789,5|
+|   123456789,5|   +/-  | -123456789,5|
+
+Scenario Outline: Disabling buttons
+Given in the display screen the <numberOnScreen> is shown
+Then the numerical buttons and the comma button are disabled
+
+Examples:
+|numberOnScreen|
+|    1234567890|
+|   -1234567890|
+|   123456789,5|
+|  -123456789,5|
+
+Scenario: Disabling the second comma
+Given in the display screen the number 3,141592 is shown
+Then the comma button is disabled
+
+Scenario: Disabling because of error
+Given in the display screen an ERROR is displayed
+Then all buttons except the C button are disabled
+
+Scenario Outline: Reenabling buttons with no error
+Given there are unabled buttons
+And no ERROR on the display screen
+When I click on the button <button>
+Then all buttons are enabled again
+
+Examples:
+|button|
+|   C  |
+|   +  |
+|   -  |
+|   *  |
+|   /  |
+|   =  |
+
+Scenario: Reenabling buttons with error
+Given there are unabled buttons
+And there is an ERROR on the display screen
+When I click on the button C
+Then all buttons are enabled again
 
 Scenario Outline: Performing two number operations
 Given in the display screen the number <numberOnScreen> is shown
@@ -150,16 +202,45 @@ Then in the display screen should be show ERROR
 
 Scenario Outline: Clicking two different operation buttons
 Given in the display screen the number <firstNumber> is shown
-When the user press <Button>
-And the user press <Button2>
-And the user writes the number: <secondNumber>
-When the user press the =  
-Then in the display screen should be show a <resultDisplay>
+When the user presses <Button>
+And the user presses <Button2>
+And the user writes the number <secondNumber>
+When the user presses the =  
+Then the display screen shows <resultDisplay>
 
 |firstNumber|Button|Button2|secondNumber|resultDisplay|
 |         12|   +  |   /   |           6|            2|
 |       1234|   -  |   +   |          31|         1265|
 |       9,26|   *  |   *   |       2,15 |       19,909|
+
+Scenario Outline: Doing a new operation
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses the =
+And the operation result <resultDisplay> is shown
+When the user writes the number <thirdNumber>
+Then the display screen shows <thirdNumber>
+
+|firstNumber|Button|secondNumber|resultDisplay|thirdNumber|
+|       12,2|   +  |           6|         18,2|         13|
+| 1234567890|   +  |           1|   1234567891|        -24|
+
+Scenario Outline: Using the previous result in a new operation
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses the =
+And the operation result <resultDisplay> is shown
+And the user presses <Button2>
+And the user writes the number <thirdNumber>
+And the user presses the =
+Then the display screen shows <resultDisplay2>
+
+|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
+|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
+|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
+| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
 
 Scenario: Division with 0
 Given in the display screen the number 23 is shown
@@ -173,15 +254,3 @@ Given in the display screen the number 23 is shown
 And the user press +
 And the user press the = 
 Then in the display screen should be show ERROR
-
-
-
-
-
-
-
-display = 1 place for the sign + 10 digits for the numbers (What happens with the comma¿¿¿)
-!ALTERNATIVE: Using the Enter keyboard button as the equal button -> Inputting the keyboard as well
-Getting results without "=" (using operators)
-Do We need to clarify taht we can't change the sign of the numbers using the keyboard? -> ALT
-Can we move over the screen buttons using the TAB key and clicking on it using space key?
