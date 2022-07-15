@@ -34,12 +34,17 @@ h1 span{
 	border: 1px solid white;
 }
 
+.numbers{
+	background-color: var(--numbers-color);
+}
+
 #calculatorContainer button:hover{
 	font-size: 1.1em;
 	background-color: rgb(201, 190, 190);
-	cursor: pointer;
+	cursor: var(--cursor);
 }
 
+/*
 #backSpace{
 	background-color: black;
 	padding: 0;
@@ -52,10 +57,11 @@ h1 span{
 #backSpace:hover{
 	color: rgb(186, 179, 179);
 }
+*/
 
 #calculatorDisplay{
 	height: 3.125rem;
-	width: 74.5%;
+	width: 100%;
 	background-color: #999;
 	color: #fff;
 	padding: 0.75rem 1.25rem;
@@ -92,7 +98,7 @@ h1 span{
 #calculatorContainer #clearButton:hover{
 	font-size: 0.9em;
 	background-color: rgb(236, 69, 69);
-	cursor: pointer;
+	cursor: var(--cursor);
 }
 
 #calculatorContainer .operators{
@@ -108,8 +114,25 @@ h1 span{
 
 :root{
 	--operator-color: green;
+	--decimal-color: white;
+	--numbers-color: white;
+	--cursor: pointer;
 }
 
 .highlightOperator{
 	--operator-color: rgb(16, 180, 16);
+}
+
+.disabledComa{
+	--decimal-color: rgb(81, 79, 79);
+	--cursor: default;
+}
+
+#decimal{
+	background-color: var(--decimal-color);
+	cursor: default;
+}
+
+.disabledNumbers{
+	--numbers-color: rgb(81, 79, 79);
 }

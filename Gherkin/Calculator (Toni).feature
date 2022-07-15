@@ -66,15 +66,15 @@ Examples:
 |             0|   9  |             9 |
 |             0|   ,  |            0, |
 |             1|  ESC |             0 |
-|            -1|  Ctrl|             1 |
-|             1|  Ctrl|            -1 |
+|            -1|  Alt |             1 |
+|             1|  Alt |            -1 |
 
 Scenario Outline: Pressing operators keys
 When the user press the <Key> key
 Then the <Key> button should be highlighted
 
 Examples:
-|Key   |
+| Key  |
 |   +  |
 |   -  |
 |   /  |
@@ -96,8 +96,13 @@ Examples:
 |          1234| ,    |        1234,|
 |         1234,| 1    |       1234,1|
 |        1234,1| ,    |       1234,1|
-|             0| +/-  |           0 |
-|             7| +/-  |          -7 |
+|             0| +/-  |            0|
+|            0,| +/-  |           0,|
+|           13,| +/-  |         -13,|
+|          -13,| +/-  |          13,|
+|          -0,5| +/-  |          0,5|
+|           0,5| +/-  |         -0,5|
+|             7| +/-  |           -7|
 |          1234| +/-  |        -1234|
 |         -1234| +/-  |         1234|
 
@@ -186,6 +191,10 @@ Examples:
 |            10|    /    |          -2|           -5|
 |           -10|    /    |           2|           -5|
 |           -10|    /    |          -2|            5|
+|             1|    /    |           0|        ERROR|
+|            -1|    /    |           0|        ERROR|
+|             0|    /    |           0|        ERROR|
+
 
 Scenario Outline: Performing two number operations with a result number with more than 10 digits
 Given in the display screen the number 9999999999 is shown
@@ -233,6 +242,21 @@ And the user writes the number <secondNumber>
 And the user presses the =
 And the operation result <resultDisplay> is shown
 And the user presses <Button2>
+And the user writes the number <thirdNumber>
+And the user presses the =
+Then the display screen shows <resultDisplay2>
+
+|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
+|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
+|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
+| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
+
+Scenario Outline: Using the previous result in a new operation easier
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses <Button2>
+And the operation result <resultDisplay> is shown
 And the user writes the number <thirdNumber>
 And the user presses the =
 Then the display screen shows <resultDisplay2>
