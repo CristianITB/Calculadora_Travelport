@@ -50,7 +50,7 @@ function addComa(){
 	let display = document.getElementById('calculatorDisplay');
 	if(display.innerHTML == 0){
 		display.innerHTML = "0,"
-	} else if(display.innerHTML.includes(",") == false && display.innerHTML < 10){
+	} else if(display.innerHTML.includes(",") == false && display.innerHTML.length < 10){
 		display.innerHTML += ","
 		document.getElementById("decimal").classList.add("disabledComa");
 	}
