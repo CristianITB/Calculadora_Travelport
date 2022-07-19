@@ -25,6 +25,7 @@ Examples:
 |             0|   9  |             9 |
 |             0|   ,  |            0, |
 |             1|   C  |             0 |
+|           173|   C  |             0 |
 |             1| +/-  |           -1  |
 
 Scenario Outline: Clicking operators screen buttons
@@ -66,15 +67,17 @@ Examples:
 |             0|   9  |             9 |
 |             0|   ,  |            0, |
 |             1|  ESC |             0 |
-|            -1|  Alt |             1 |
-|             1|  Alt |            -1 |
+|            -1|  Left Ctrl |             1 |
+|            -1| Right Ctrl |             1 |
+|             1| Right Ctrl |            -1 |
+|             1|  Left Ctrl |            -1 |
 
 Scenario Outline: Pressing operators keys
 When the user press the <Key> key
 Then the <Key> button should be highlighted
 
 Examples:
-| Key  |
+|Key   |
 |   +  |
 |   -  |
 |   /  |
@@ -120,6 +123,162 @@ Examples:
 |    123456789,|    5   |  123456789,5|
 |   123456789,5|   +/-  | -123456789,5|
 
+Scenario Outline: Performing two number operations
+Given in the display screen the number <numberOnScreen> is shown
+When the user press the <operator>
+And the user writes the number: <secondNumber>
+And the user press the =                              
+Then in the display screen should be show a <resultDisplay>
+
+Examples:
+|numberOnScreen|operator |secondNumber|resultDisplay|
+|            24|    +    |           6|           30|
+|          24,2|    +    |         6,4|         30,6|
+|         13,14|    +    |       2,781|       15,921|
+|            10|    +    |          -5|            5|
+|           -20|    +    |          10|          -10|
+|            24|    -    |           6|           18|
+|             6|    -    |          24|          -18|
+|             6|    -    |         -24|           30|
+|          24,2|    -    |         6,4|         17,8|
+|         13,14|    -    |       2,781|       10,359|
+|            10|    *    |           8|           80|
+|           5,2|    *    |           8|         41,6|
+|         36,25|    *    |       7,496|       271,73|
+|            10|    *    |          -8|          -80|
+|           -10|    *    |          -8|           80|
+|           -10|    *    |           8|          -80|
+|            10|    /    |           2|            5|
+|            84|    /    |         4,3|  19,53488372|
+|         23,58|    /    |       10,14|  2,325443787|
+|            10|    /    |          -2|           -5|
+|           -10|    /    |           2|           -5|
+|           -10|    /    |          -2|            5|
+
+Scenario Outline: Before clicking the equal button
+Given in the display screen the number <numberOnScreen> is shown
+When the user press the <operator>
+And the user writes the number: <secondNumber>                       
+Then in the display screen should be show a <resultDisplay>
+
+Examples:
+|numberOnScreen|operator |secondNumber|resultDisplay|
+|            24|    +    |           6|            6|
+|          24,2|    -    |         6,4|          6,4|
+|         13,14|    *    |       2,781|        2,781|
+|            84|    /    |        -4,3|         -4,3|
+
+Scenario Outline: Performing two number operations with a result number with more than 10 digits
+Given in the display screen the number 9999999999 is shown
+When the user press <operator>
+And the user writes the number: <secondNumber>
+And the user press = 
+Then in the display screen should be show ERROR
+
+Examples:
+|numberOnScreen|operator |secondNumber|
+|    9999999999|    +    |           1|
+|            -1|    -    |  9999999999|
+|    9999999999|    *    |           2|
+|    9999999999|    /    |         0,1|
+
+Scenario: Clicking the C button
+Given the user opens the Calculator
+When I click the C button
+Then the Calculator resets
+
+Scenario Outline: Clicking two different operation buttons
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user presses <Button2>
+And the user writes the number <secondNumber>
+When the user presses the =  
+Then the display screen shows <resultDisplay>
+
+Examples:
+|firstNumber|Button|Button2|secondNumber|resultDisplay|
+|         12|   +  |   /   |           6|            2|
+|       1234|   -  |   +   |          31|         1265|
+|       9,26|   *  |   *   |       2,15 |       19,909|
+
+Scenario Outline: Doing a new operation
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses the =
+And the operation result <resultDisplay> is shown
+When the user writes the number <thirdNumber>
+Then the display screen shows <thirdNumber>
+
+Examples:
+|firstNumber|Button|secondNumber|resultDisplay|thirdNumber|
+|       12,2|   +  |           6|         18,2|         13|
+| 1234567890|   +  |           1|   1234567891|        -24|
+
+Scenario Outline: Using the previous result in a new operation
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses the =
+And the operation result <resultDisplay> is shown
+And the user presses <Button2>
+And the user writes the number <thirdNumber>
+And the user presses the =
+Then the display screen shows <resultDisplay2>
+
+Examples:
+|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
+|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
+|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
+| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
+
+Scenario Outline: Using the previous result in a new operation easier
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+And the user writes the number <secondNumber>
+And the user presses <Button2>
+And the operation result <resultDisplay> is shown
+And the user writes the number <thirdNumber>
+And the user presses the =
+Then the display screen shows <resultDisplay2>
+
+Examples:
+|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
+|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
+|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
+| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
+
+Scenario Outline: Division with 0
+Given in the display screen the number <numberOnScreen> is shown
+And the user press /
+And the user writes the number: 0
+When the user press the =  
+Then in the display screen should be show ERROR
+
+Examples:
+|numberOnScreen|
+|             1|
+|            -1|
+|             0|
+
+Scenario: Doing an operation without a second number
+Given in the display screen the number 23 is shown
+And the user press +
+And the user press the = 
+Then in the display screen should be show ERROR
+
+Scenario: Doing an operation without a first number
+Given the user opens the app
+And the user presses -
+And the user writes 23
+And the user presses the = 
+Then the display screen should show -23
+
+Scenario: Button Disabled
+Given in the display screen the -123456789,5 is shown
+When I hover over a numerical button
+Then the cursos does not change to a clicking cursor
+
 Scenario Outline: Disabling buttons
 Given in the display screen the <numberOnScreen> is shown
 Then the numerical buttons and the comma button are disabled
@@ -160,121 +319,26 @@ And there is an ERROR on the display screen
 When I click on the button C
 Then all buttons are enabled again
 
-Scenario Outline: Performing two number operations
-Given in the display screen the number <numberOnScreen> is shown
-When the user press the <operator>
-And the user writes the number: <secondNumber>
-And the user press the =                              
-Then in the display screen should be show a <resultDisplay>
+Scenario Outline: Showing the first number after pressing operation
+Given in the display screen the number <firstNumber> is shown
+When the user presses <Button>
+Then the display screen shows <firstNumber>
 
 Examples:
-|numberOnScreen|operator |secondNumber|resultDisplay|
-|            24|    +    |           6|           30|
-|          24,2|    +    |         6,4|         30,6|
-|         13,14|    +    |       2,781|       15,921|
-|            10|    +    |          -5|            5|
-|           -20|    +    |          10|          -10|
-|            24|    -    |           6|           18|
-|             6|    -    |          24|          -18|
-|             6|    -    |         -24|           30|
-|          24,2|    -    |         6,4|         17,8|
-|         13,14|    -    |       2,781|       10,359|
-|            10|    *    |           8|           80|
-|           5,2|    *    |           8|         41,6|
-|         36,25|    *    |       7,496|       271,73|
-|            10|    *    |          -8|          -80|
-|           -10|    *    |          -8|           80|
-|           -10|    *    |           8|          -80|
-|            10|    /    |           2|            5|
-|            84|    /    |         4,3|   19,5348837|
-|         23,58|    /    |       10,14|   2,32544379|
-|            10|    /    |          -2|           -5|
-|           -10|    /    |           2|           -5|
-|           -10|    /    |          -2|            5|
-|             1|    /    |           0|        ERROR|
-|            -1|    /    |           0|        ERROR|
-|             0|    /    |           0|        ERROR|
+|firstNumber|Button|
+|         13|   +  |
+|      -17,2|   -  |
+|     3,1415|   *  |
+|      -2718|   /  |
 
+Scenario Outline: Using the Equals button without operation
+Given the user opens the app
+And the user writes the number <firstNumber>
+When the user presses the = 
+Then the display screen should show <resultDisplay>
 
-Scenario Outline: Performing two number operations with a result number with more than 10 digits
-Given in the display screen the number 9999999999 is shown
-When the user press <operator>
-And the user writes the number: <secondNumber>
-And the user press = 
-Then in the display screen should be show ERROR
-
-|numberOnScreen|operator |secondNumber|
-|     999999999|    +    |           1|
-|            -1|    -    |  -999999999|
-|     999999999|    *    |           2|
-|     999999999|    /    |         0,1|
-
-Scenario Outline: Clicking two different operation buttons
-Given in the display screen the number <firstNumber> is shown
-When the user presses <Button>
-And the user presses <Button2>
-And the user writes the number <secondNumber>
-When the user presses the =  
-Then the display screen shows <resultDisplay>
-
-|firstNumber|Button|Button2|secondNumber|resultDisplay|
-|         12|   +  |   /   |           6|            2|
-|       1234|   -  |   +   |          31|         1265|
-|       9,26|   *  |   *   |       2,15 |       19,909|
-
-Scenario Outline: Doing a new operation
-Given in the display screen the number <firstNumber> is shown
-When the user presses <Button>
-And the user writes the number <secondNumber>
-And the user presses the =
-And the operation result <resultDisplay> is shown
-When the user writes the number <thirdNumber>
-Then the display screen shows <thirdNumber>
-
-|firstNumber|Button|secondNumber|resultDisplay|thirdNumber|
-|       12,2|   +  |           6|         18,2|         13|
-| 1234567890|   +  |           1|   1234567891|        -24|
-
-Scenario Outline: Using the previous result in a new operation
-Given in the display screen the number <firstNumber> is shown
-When the user presses <Button>
-And the user writes the number <secondNumber>
-And the user presses the =
-And the operation result <resultDisplay> is shown
-And the user presses <Button2>
-And the user writes the number <thirdNumber>
-And the user presses the =
-Then the display screen shows <resultDisplay2>
-
-|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
-|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
-|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
-| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
-
-Scenario Outline: Using the previous result in a new operation easier
-Given in the display screen the number <firstNumber> is shown
-When the user presses <Button>
-And the user writes the number <secondNumber>
-And the user presses <Button2>
-And the operation result <resultDisplay> is shown
-And the user writes the number <thirdNumber>
-And the user presses the =
-Then the display screen shows <resultDisplay2>
-
-|firstNumber|Button|secondNumber|resultDisplay|Button2|thirdNumber|resultDisplay2|
-|       12,2|   +  |           6|         18,2|   +   |         13|          31,2|
-|        123|   -  |       -24,8|        147,8|   *   |         12|        1773,6|
-| 1234567890|   /  |        -2,5|   -493827156|   -   |        147|    -493827303|
-
-Scenario: Division with 0
-Given in the display screen the number 23 is shown
-And the user press /
-And the user writes the number: 0
-When the user press the =  
-Then in the display screen should be show ERROR
-
-Scenario Outline: Doing an operation without a second number
-Given in the display screen the number 23 is shown
-And the user press +
-And the user press the = 
-Then in the display screen should be show ERROR
+Examples:
+|firstNumber|resultDisplay|
+|           |      0      |
+|         10|      10     |
+|       -10,|     -10     |

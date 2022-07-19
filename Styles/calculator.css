@@ -126,15 +126,15 @@ h1 span{
 
 .disabledComa{
 	--decimal-color: rgb(81, 79, 79);
-	--cursor: default;
+	--cursor: not-allowed;
 }
 
 #decimal{
 	background-color: var(--decimal-color);
-	cursor: default;
+	cursor: var(--cursor);
 }
 
 .disabledNumbers{
 	--numbers-color: rgb(81, 79, 79);
-	cursor: default;
+	cursor: not-allowed;
 }
