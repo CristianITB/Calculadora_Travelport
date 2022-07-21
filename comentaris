@@ -1,0 +1,24 @@
+error aqui
+|         13,14|    +    |       2,781|       15,921|
+|             6|    -    |         -24|           30|
+|            84|    /    |         4,3|  19,53488372|
+
+
+
+ha de donar error quan dona mes de 10 xifres sense decimals, si son mes
+de 10 pero amb decimals -> arrodonir
+
+si li fas 3 + 5 i li tornes a donar al + se't fa la suma anterior i pilla el
+resultat com a firstNumber de la seguent
+
+
+petit bug qe si fas 13 = + escrius un altre numero, el + se't queda highlight 
+i no pots escriure el següent numero, sino que se't va afegint a l'anterior
+i has de fer reset (C)
+
+si el primer te coma pero el segon no, no et resalta la "," al donar-li = 
+però si ho té el 2n si
+
+deshabilitar operadors quan fas 1234567890 + 1,234567890
+
+si fas a + b i escrius a' + b', tot be, pero si fas a + b +c + d... i dp a' + b' mal

@@ -253,7 +253,7 @@ Given in the display screen the number <numberOnScreen> is shown
 And the user press /
 And the user writes the number: 0
 When the user press the =  
-Then in the display screen should be show ERROR
+Then the display screen should show ERROR
 
 Examples:
 |numberOnScreen|
@@ -265,7 +265,7 @@ Scenario: Doing an operation without a second number
 Given in the display screen the number 23 is shown
 And the user press +
 And the user press the = 
-Then in the display screen should be show ERROR
+Then the display screen should show ERROR
 
 Scenario: Doing an operation without a first number
 Given the user opens the app
@@ -277,7 +277,7 @@ Then the display screen should show -23
 Scenario: Button Disabled
 Given in the display screen the -123456789,5 is shown
 When I hover over a numerical button
-Then the cursos does not change to a clicking cursor
+Then the cursor does not change to a clicking cursor
 
 Scenario Outline: Disabling buttons
 Given in the display screen the <numberOnScreen> is shown
@@ -294,9 +294,20 @@ Scenario: Disabling the second comma
 Given in the display screen the number 3,141592 is shown
 Then the comma button is disabled
 
-Scenario: Disabling because of error
-Given in the display screen an ERROR is displayed
+Scenario Outline: Disabling because of error
+Given the user opens the app
+When the user clicks the sequence of buttons <sequence>
 Then all buttons except the C button are disabled
+
+Example:
+|sequence|
+|1 / 0 = |
+|1 / 0 + |
+|1 / =   |
+|9999999999 + 1 =|
+|9999999999 + 1 *|
+|9999999999 +/- - 1 =|
+|9999999999 +/- - 1 /|
 
 Scenario Outline: Reenabling buttons with no error
 Given there are unabled buttons

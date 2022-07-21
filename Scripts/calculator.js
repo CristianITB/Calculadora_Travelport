@@ -1,40 +1,40 @@
 document.addEventListener('keydown', (event) => {
 	var keyValue = event.key;
 	//var codeValue = event.code;
+	event.preventDefault();
 
 	if(keyValue == "Escape"){
 		clearDisplay("0");		
 	} else if(keyValue == "Enter"){
-		calculateResult();
+		calculateResult("=");
 	} else if(keyValue == "Control"){
 		changeSign();
 	} else if(keyValue == ","){
-		addComa();
+		takeValue(keyValue);
 	} else if(keyValue == "+"){
-		getFirstvalue(keyValue);
+		takeValue(keyValue);
 	} else if(keyValue == "-"){
-		getFirstvalue(keyValue);
+		takeValue(keyValue);
 	} else if(keyValue == "*"){
-		getFirstvalue(keyValue);
+		takeValue(keyValue);
 	} else if(keyValue == "/"){
-		getFirstvalue(keyValue);
+		takeValue(keyValue);
 	} else if(keyValue >= 0 && keyValue <= 9){
 		takeValue(keyValue);
-		/*
-		if(operatorSign != ""){
-			getSecondValue(keyValue);
-		} 
-		*/
 	}
    
 	//console.log("keyValue: " + keyValue);
 	//console.log("codeValue: " + codeValue);
   }, false);
 
+var multipleOperation = false;
+
+
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
-	if(x >= 0 && x <= 9){
-		if(display.innerHTML == "0" || display.innerHTML == "NaN"){
+	if(x >= 0 && x <= 9 || x == ","){
+		if(display.innerHTML == "0" || display.innerHTML == "NaN" || (firstNumber == 0 && operatorSign == "" && secondNumber == 0)){
+			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
 		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
@@ -45,14 +45,27 @@ function takeValue(x){
 				display.innerHTML += x;
 			}
 		}
-		if(operatorSign != ""){
+		if(operatorSign != "" || multipleOperation == true){
 			getSecondValue(x);
 		}
 		checkLength();
 	} else{
-		getFirstvalue(x)
+		operatorsManagement(x);
 	}
+}
 
+function operatorsManagement(operatorValue){
+	removeOperatorsHighlight();
+	document.getElementById(operatorValue).classList.add("highlightOperator");
+	if(operatorSign == ""){
+		getFirstvalue(operatorValue);
+	} else if(secondNumber != 0){
+		calculateResult(operatorValue);
+		multipleOperation = true;
+		operatorSign = operatorValue;
+	} else{
+		operatorSign = operatorValue;
+	}
 }
 
 function getFirstvalue(keyValue){
@@ -65,10 +78,14 @@ function getFirstvalue(keyValue){
 function getSecondValue(keyValue){
 	let display = document.getElementById('calculatorDisplay');
 	if(secondNumber == 0){
-		removeNumbersHighlight();
-		removeComaHighlight();
-		display.innerHTML = "";
-		display.innerHTML = keyValue;
+		removeAllHighlights();
+		if(keyValue == ","){
+			display.innerHTML = "0,"
+			highlightComma();
+		} else{
+			display.innerHTML = "";
+			display.innerHTML = keyValue;
+		}
 		secondNumber = display.innerHTML;
 	}
 }
@@ -86,7 +103,11 @@ function addComa(){
 function changeSign(){
 	let display = document.getElementById('calculatorDisplay');
 
-	if(display.innerHTML.includes(",")){
+	if(display.innerHTML[display.innerHTML.length-1] == ","){
+		let value = display.innerHTML.slice(0, display.innerHTML.length-1)*-1
+		value += ",";
+		display.innerHTML = value;
+	} else if(display.innerHTML.includes(",")){
 		let replacedDisplay = replaceComma(display.innerHTML);
 		replacedDisplay *= -1;
 		let replacedDisplayBis = replaceDot(replacedDisplay.toString());
@@ -124,7 +145,6 @@ function checkLength(){
 		highlightNumbers();
 	}
 }
-
 
 function highlightOperator(x){
 	removeAllHighlights();
@@ -186,26 +206,40 @@ var firstNumber = 0
 var operatorSign = ""
 var secondNumber = 0
 
-function calculateResult(){
-	removeOperatorsHighlight();
-	removeComaHighlight();
+function calculateResult(keyValue){
+
+	var operationResult = 0;
 
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
 
 	if(operatorSign == '+'){
-		calculateSum();
+		operationResult = calculateSum();
 	} else if(operatorSign == '-'){
-		calculateSubtraction();
+		operationResult = calculateSubtraction();
 	} else if(operatorSign == '*'){
-		calculateMultiplication();
+		operationResult = calculateMultiplication();
 	} else if(operatorSign == '/'){
-		calculateDivision();
+		operationResult = calculateDivision();
+	} else{
+		if(secondNumber[secondNumber.length-1] == ","){
+			document.getElementById('calculatorDisplay').innerHTML = secondNumber.slice(0, secondNumber.length-1)
+		}
+	}
+
+	firstNumber = operationResult;
+	secondNumber = 0;
+
+	if(keyValue != "="){
+		multipleOperation = true;
+	} else{
+		cleanTemporaryVars();
+		multipleOperation = false;
 	}
 }
 
 function calculateSum(){
 	checkCommas();
-	let sum = parseFloat(firstNumber) + parseFloat(secondNumber);
+	let sum = (Math.floor((parseFloat(firstNumber) + parseFloat(secondNumber))*1000))/1000
 
 	if(sum.toString().includes(".")){
 		sum = replaceDot(sum.toString());
@@ -215,18 +249,17 @@ function calculateSum(){
 
 	if(error == false){
 		document.getElementById('calculatorDisplay').innerHTML = sum;
-		cleanTemporaryVars();
-		firstNumber = sum;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
 		highlightComma();
 		highlightNumbers();
 	}
+	return sum;
 }
 
 function calculateSubtraction(){
 	checkCommas();
-	let substraction = parseFloat(firstNumber) - parseFloat(secondNumber);
+	let substraction = (Math.floor((parseFloat(firstNumber) - parseFloat(secondNumber))*1000))/1000
 
 	if(substraction.toString().includes(".")){
 		substraction = replaceDot(substraction.toString());
@@ -236,13 +269,12 @@ function calculateSubtraction(){
 
 	if(error == false){
 		document.getElementById('calculatorDisplay').innerHTML = substraction;
-		cleanTemporaryVars();
-		firstNumber = substraction;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
 		highlightComma();
 		highlightNumbers();
 	}
+	return substraction;
 }
 
 function calculateMultiplication(){
@@ -257,13 +289,12 @@ function calculateMultiplication(){
 
 	if(error == false){
 		document.getElementById('calculatorDisplay').innerHTML = mult;
-		cleanTemporaryVars();
-		firstNumber = mult;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
 		highlightComma();
 		highlightNumbers();
 	}
+	return mult;
 }
 
 function calculateDivision(){
@@ -274,6 +305,8 @@ function calculateDivision(){
 		div = replaceDot(div.toString());
 	}
 
+	//puedo hacer que dentro de check result length me checkee la long y de error o no, y ademas me lo corte si fuera necesario;
+
 	let error = checkResultLength(div);
 
 	if(secondNumber == 0){
@@ -282,13 +315,12 @@ function calculateDivision(){
 
 	if(error == false){
 		document.getElementById('calculatorDisplay').innerHTML = div;
-		cleanTemporaryVars();
-		firstNumber = div;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
 		highlightComma();
 		highlightNumbers();
 	}
+	return div;
 }
 
 function cleanTemporaryVars(){
@@ -298,26 +330,41 @@ function cleanTemporaryVars(){
 }
 
 function checkCommas(){
-	if(firstNumber.includes(",")){
+	if(firstNumber.toString().includes(",")){
 		firstNumber = replaceComma(firstNumber);
 	}
-	if(secondNumber.includes(",")){
+	if(secondNumber.toString().includes(",")){
 		secondNumber = replaceComma(secondNumber);
 	}
 }
 
 function checkResultLength(result){
 	let error = false;
+	console.log(result)
+	console.log(typeof(result))     //ejemplo del 84 / 4,3
+	console.log(Math.abs(result))
+	console.log(Math.abs(result).toString().length)
+
+	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes(","))){
+		console.log("Todo correcto makina")
+	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(",")){
+		console.log("A este le tienes qe cortar decimales")
+	} else if (Math.abs(result).toString().length > 11 && result.toString().includes(",") == false){
+		console.log("Este num es demasiado grande")
+	} else{
+		console.log("lol")
+	}
+
 	if(result.length >= 10){
 		if(	(result.length == 10 && result.includes(",") == false && result.includes("-") == false) ||
 			(result.length == 11 && result.includes(",") == false && result.includes("-") == true) ||
 			(result.length == 11 && result.includes(",") == true && result.includes("-") == false) ||
-			(result.length == 12 && result.includes(",") == true && result.includes("-") == true)
+			(result.length == 12 && result.includes(",") == true && result.includes("-") == true)				//esto se puede manejar mejoor si pones qe solo se fije en el abs, te ahorras casos del or
 		){
 			error = false;
 		} else{
 			error = true;
 		}
-	}
+	} 
 	return error;
 }
