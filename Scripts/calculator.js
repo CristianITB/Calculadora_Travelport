@@ -33,7 +33,7 @@ var multipleOperation = false;
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
 	if(x >= 0 && x <= 9 || x == ","){
-		if(display.innerHTML == "0" || display.innerHTML == "NaN" || (firstNumber == 0 && operatorSign == "" && secondNumber == 0)){
+		if(x != "," && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
 			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
@@ -91,9 +91,13 @@ function getSecondValue(keyValue){
 }
 
 function addComa(){
+	if(firstNumber == 0){
+		firstNumber = "0,"
+	}
 	let display = document.getElementById('calculatorDisplay');
 	if(display.innerHTML == 0){
 		display.innerHTML = "0,"
+		highlightComma();
 	} else if(display.innerHTML.includes(",") == false && display.innerHTML.length < 10){
 		display.innerHTML += ",";
 		highlightComma();
@@ -226,6 +230,12 @@ function calculateResult(keyValue){
 		}
 	}
 
+	if(operationResult.toString().includes(",")){
+		highlightComma();
+	} else{
+		removeComaHighlight();
+	}
+
 	firstNumber = operationResult;
 	secondNumber = 0;
 
@@ -340,19 +350,21 @@ function checkCommas(){
 
 function checkResultLength(result){
 	let error = false;
+	/*
 	console.log(result)
 	console.log(typeof(result))     //ejemplo del 84 / 4,3
 	console.log(Math.abs(result))
 	console.log(Math.abs(result).toString().length)
+	*/
 
 	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes(","))){
-		console.log("Todo correcto makina")
+		//console.log("Todo correcto makina")
 	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(",")){
-		console.log("A este le tienes qe cortar decimales")
+		//console.log("A este le tienes qe cortar decimales")
 	} else if (Math.abs(result).toString().length > 11 && result.toString().includes(",") == false){
-		console.log("Este num es demasiado grande")
+		//console.log("Este num es demasiado grande")
 	} else{
-		console.log("lol")
+		//console.log("lol")
 	}
 
 	if(result.length >= 10){

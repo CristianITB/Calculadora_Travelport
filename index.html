@@ -42,7 +42,7 @@
 			<button class="operators" value="*" id="*" onclick="highlightOperator(event), takeValue(this.value)">*</button>
 
 			<button id="zero" class="numbers" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
-			<button id="decimal" value="," onclick="addComa(), takeValue(this.value)">,</button>
+			<button id="decimal" value="," onclick="takeValue(this.value)">,</button>
 			<button class="operators" onclick="changeSign()">+/-</button>
 			<button class="operators" value="/" id="/" onclick="highlightOperator(event), takeValue(this.value)">/</button>
 			
