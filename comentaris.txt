@@ -1,0 +1,11 @@
+deshabilitar operadors quan fas 1234567890 + 1,234567890 (i en general quan tenim eror)
+
+
+falta els seguents escenaris: 
+- Scenario: Doing an operation without a first number (l. 270)  -> antes en la linea 37 no estaba esto: ...&& operatorSign == "" &&...
+- Scenario Outline: Disabling because of error
+
+
+
+
+poner en los highlights: xxxxx.disabled = true;

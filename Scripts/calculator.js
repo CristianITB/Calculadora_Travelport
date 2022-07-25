@@ -32,8 +32,9 @@ var multipleOperation = false;
 
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
-	if(x >= 0 && x <= 9 || x == ","){
-		if(x != "," && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
+	if((x >= 0 && x <= 9 || x == ",") && (display.innerHTML != "ERROR")){
+		console.log(operatorSign)
+		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
 			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
@@ -168,6 +169,15 @@ function highlightNumbers(){
 	}
 }
 
+/*
+function highlightAllOperators(){
+	let changeClass = document.getElementsByClassName('operators');
+	for(let i = 0; i < changeClass.length; i++){
+		changeClass[i].classList.add('disabledoperators');
+	}
+}
+*/
+
 function removeOperatorsHighlight(){
 	let changeClass = document.getElementsByClassName('operators');
 	for(let i = 0; i < changeClass.length; i++){
@@ -212,6 +222,17 @@ var secondNumber = 0
 
 function calculateResult(keyValue){
 
+	
+	console.log("en calculate: ")
+	console.log(firstNumber + " first")
+	console.log(operatorSign + " operator")
+	console.log(secondNumber + " second")
+
+	if(secondNumber == 0){
+		removeOperatorsHighlight();
+		document.getElementById('calculatorDisplay').innerHTML = 0;
+	}
+
 	var operationResult = 0;
 
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
@@ -233,7 +254,11 @@ function calculateResult(keyValue){
 	if(operationResult.toString().includes(",")){
 		highlightComma();
 	} else{
-		removeComaHighlight();
+		if(Math.abs(operationResult).toString().length < 10 && document.getElementById('calculatorDisplay').innerHTML != "ERROR"){
+			removeComaHighlight();
+		} else{
+			highlightComma();
+		}
 	}
 
 	firstNumber = operationResult;
@@ -248,8 +273,14 @@ function calculateResult(keyValue){
 }
 
 function calculateSum(){
+
+	console.log("en calculateSum: ")
+	console.log(firstNumber + " first")
+	console.log(operatorSign + " operator")
+	console.log(secondNumber + " second")
+
 	checkCommas();
-	let sum = (Math.floor((parseFloat(firstNumber) + parseFloat(secondNumber))*1000))/1000
+	let sum = (parseFloat(firstNumber) + parseFloat(secondNumber))
 
 	if(sum.toString().includes(".")){
 		sum = replaceDot(sum.toString());
@@ -257,19 +288,23 @@ function calculateSum(){
 
 	let error = checkResultLength(sum);
 
-	if(error == false){
+	if(error != true){
+		if(error != false){
+			sum = error;
+		}
 		document.getElementById('calculatorDisplay').innerHTML = sum;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
+		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
 		highlightComma();
 		highlightNumbers();
-	}
+	} 
+
 	return sum;
 }
 
 function calculateSubtraction(){
 	checkCommas();
-	let substraction = (Math.floor((parseFloat(firstNumber) - parseFloat(secondNumber))*1000))/1000
+	let substraction = (parseFloat(firstNumber) - parseFloat(secondNumber))
 
 	if(substraction.toString().includes(".")){
 		substraction = replaceDot(substraction.toString());
@@ -277,13 +312,16 @@ function calculateSubtraction(){
 
 	let error = checkResultLength(substraction);
 
-	if(error == false){
+	if(error != true){
+		if(error != false){
+			substraction = error;
+		}
 		document.getElementById('calculatorDisplay').innerHTML = substraction;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
+		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
 		highlightComma();
 		highlightNumbers();
-	}
+	} 
 	return substraction;
 }
 
@@ -297,13 +335,16 @@ function calculateMultiplication(){
 
 	let error = checkResultLength(mult);
 
-	if(error == false){
+	if(error != true){
+		if(error != false){
+			mult = error;
+		}
 		document.getElementById('calculatorDisplay').innerHTML = mult;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
+		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
 		highlightComma();
 		highlightNumbers();
-	}
+	} 
 	return mult;
 }
 
@@ -323,13 +364,16 @@ function calculateDivision(){
 		error = true;
 	}
 
-	if(error == false){
+	if(error != true){
+		if(error != false){
+			div = error;
+		}
 		document.getElementById('calculatorDisplay').innerHTML = div;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR (result too long)";
+		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
 		highlightComma();
 		highlightNumbers();
-	}
+	} 
 	return div;
 }
 
@@ -350,21 +394,28 @@ function checkCommas(){
 
 function checkResultLength(result){
 	let error = false;
-	/*
-	console.log(result)
-	console.log(typeof(result))     //ejemplo del 84 / 4,3
-	console.log(Math.abs(result))
-	console.log(Math.abs(result).toString().length)
-	*/
+	
+	//console.log(result)
+	//console.log(typeof(result))     //ejemplo del 84 / 4,3
+	if(result.toString().includes(",")){
+		//console.log(parseFloat(replaceComma(result)) + " parsed");
+		result = parseFloat(replaceComma(result));
+	}
+	//console.log(Math.abs(result))
+	//console.log(Math.abs(result).toString().length)
 
-	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes(","))){
-		//console.log("Todo correcto makina")
-	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(",")){
-		//console.log("A este le tienes qe cortar decimales")
-	} else if (Math.abs(result).toString().length > 11 && result.toString().includes(",") == false){
-		//console.log("Este num es demasiado grande")
+
+	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes("."))){
+		console.log("Todo correcto makina")
+		error = false;
+	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(".")){
+		console.log("A este le tienes qe cortar decimales")
+		return cutDecimals(result);
+	} else if (Math.abs(result).toString().length >= 11 && result.toString().includes(".") == false){
+		console.log("Este num es demasiado grande")
+		error = true;
 	} else{
-		//console.log("lol")
+		console.log("lol")
 	}
 
 	if(result.length >= 10){
@@ -379,4 +430,23 @@ function checkResultLength(result){
 		}
 	} 
 	return error;
+}
+
+function cutDecimals(numberToCut){
+	let i = 10;
+	let newvalue = numberToCut;
+	while(Math.abs(newvalue).toString().length > 11){
+		newvalue = numberToCut.toFixed(i);
+		i--;
+	}
+	let jesus = newvalue;
+	for(let i = newvalue.length-1; i >= 0; i-- ){
+		if(newvalue[i] == 0){
+			jesus = jesus.slice(0, jesus.length-1)
+		}
+		if(newvalue[i] == "."){
+			break;
+		}
+	}
+	return replaceDot(jesus);
 }
