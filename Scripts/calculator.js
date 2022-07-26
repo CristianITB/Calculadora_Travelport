@@ -34,6 +34,7 @@ function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
 	if((x >= 0 && x <= 9 || x == ",") && (display.innerHTML != "ERROR")){
 		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
+			console.log("aqui maquina")
 			removeComaHighlight();
 			firstNumber = x;
 			display.innerHTML = "";
@@ -60,7 +61,7 @@ function operatorsManagement(operatorValue){
 	document.getElementById(operatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
 		getFirstvalue(operatorValue);
-	} else if(secondNumber != 0){
+	} else if(secondNumber != 0 || (secondNumber == 0 && (operatorSign == "/" || operatorSign == "*"))){    //--> aquí está la clave de la solución 
 		calculateResult(operatorValue);
 		multipleOperation = true;
 		operatorSign = operatorValue;
@@ -84,6 +85,7 @@ function getSecondValue(keyValue){
 			display.innerHTML = "0,"
 			highlightComma();
 		} else{
+			console.log("aqui maquina???????????")
 			display.innerHTML = "";
 			display.innerHTML = keyValue;
 		}
@@ -241,16 +243,12 @@ var secondNumber = 0
 
 function calculateResult(keyValue){
 
-	
-	console.log("en calculate: ")
-	console.log(firstNumber + " first")
-	console.log(operatorSign + " operator")
-	console.log(secondNumber + " second")
-
-	if(secondNumber == 0){
+	if(secondNumber == 0){ 			// --> si fas 10 = et pilla el 2n com a 0 i per això mostra 0
 		removeOperatorsHighlight();
 		document.getElementById('calculatorDisplay').innerHTML = 0;
+		console.log("entra")
 	}
+
 
 	var operationResult = 0;
 
