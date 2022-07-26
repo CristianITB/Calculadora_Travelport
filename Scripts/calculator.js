@@ -33,8 +33,8 @@ var multipleOperation = false;
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
 	if((x >= 0 && x <= 9 || x == ",") && (display.innerHTML != "ERROR")){
-		console.log(operatorSign)
 		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
+			removeComaHighlight();
 			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
@@ -157,8 +157,20 @@ function highlightOperator(x){
 	changeClass.add("highlightOperator");
 }
 
+function highlightAllOperators(){
+	//Actually, when we need to disable all the operators, we do also need to disable de "=" button;
+	let changeClass = document.getElementsByClassName('operators');
+	for(let i = 0; i < changeClass.length; i++){
+		changeClass[i].classList.add('disabledOperators');
+		changeClass[i].disabled = true;
+	}
+	document.getElementById("equalButton").classList.add("disabledEqual");
+	document.getElementById("equalButton").disabled = true;
+}
+
 function highlightComma(){
 	document.getElementById("decimal").classList.add("disabledComa");
+	document.getElementById("decimal").disabled = true;
 }
 
 function highlightNumbers(){
@@ -166,6 +178,7 @@ function highlightNumbers(){
 
 	for(let i = 0; i < numbers.length; i++){
 		numbers[i].classList.add("disabledNumbers");
+		numbers[i].disabled = true;
 	}
 }
 
@@ -182,18 +195,24 @@ function removeOperatorsHighlight(){
 	let changeClass = document.getElementsByClassName('operators');
 	for(let i = 0; i < changeClass.length; i++){
 		changeClass[i].classList.remove('highlightOperator');
+		changeClass[i].classList.remove('disabledOperators');
+		changeClass[i].disabled = false;
 	}
+	document.getElementById("equalButton").classList.remove("disabledEqual");
+	document.getElementById("equalButton").disabled = false;
 } 
 
 function removeComaHighlight(){
 	let coma = document.getElementById("decimal");
 	coma.classList.remove("disabledComa")
+	coma.disabled = false;
 }
 
 function removeNumbersHighlight(){
 	let changeClass = document.getElementsByClassName('numbers');
 	for(let i = 0; i < changeClass.length; i++){
 		changeClass[i].classList.remove('disabledNumbers');
+		changeClass[i].disabled = false;
 	}
 }
 
@@ -274,11 +293,6 @@ function calculateResult(keyValue){
 
 function calculateSum(){
 
-	console.log("en calculateSum: ")
-	console.log(firstNumber + " first")
-	console.log(operatorSign + " operator")
-	console.log(secondNumber + " second")
-
 	checkCommas();
 	let sum = (parseFloat(firstNumber) + parseFloat(secondNumber))
 
@@ -295,6 +309,7 @@ function calculateSum(){
 		document.getElementById('calculatorDisplay').innerHTML = sum;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+		highlightAllOperators();
 		highlightComma();
 		highlightNumbers();
 	} 
@@ -319,6 +334,7 @@ function calculateSubtraction(){
 		document.getElementById('calculatorDisplay').innerHTML = substraction;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+		highlightAllOperators();
 		highlightComma();
 		highlightNumbers();
 	} 
@@ -342,6 +358,7 @@ function calculateMultiplication(){
 		document.getElementById('calculatorDisplay').innerHTML = mult;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+		highlightAllOperators();
 		highlightComma();
 		highlightNumbers();
 	} 
@@ -371,6 +388,7 @@ function calculateDivision(){
 		document.getElementById('calculatorDisplay').innerHTML = div;
 	} else{
 		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+		highlightAllOperators();
 		highlightComma();
 		highlightNumbers();
 	} 
@@ -439,6 +457,7 @@ function cutDecimals(numberToCut){
 		newvalue = numberToCut.toFixed(i);
 		i--;
 	}
+
 	let jesus = newvalue;
 	for(let i = newvalue.length-1; i >= 0; i-- ){
 		if(newvalue[i] == 0){

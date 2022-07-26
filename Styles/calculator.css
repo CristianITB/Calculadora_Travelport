@@ -78,7 +78,7 @@ h1 span{
 #calculatorContainer #equalButton{
 	height: 3.125rem;
 	width: 6.500rem;
-	background-color: #fd7202;
+	background-color: var(--equal-color);
 	color: #fff;
 	border: 1px solid #fd7202;
 }
@@ -117,6 +117,7 @@ h1 span{
 	--operator-color: green;
 	--decimal-color: white;
 	--numbers-color: white;
+	--equal-color: #fd7202;
 	--cursor: pointer;
 }
 
@@ -127,11 +128,13 @@ h1 span{
 .disabledOperators{
 	--operator-color: rgb(81, 79, 79);
 	--cursor: not-allowed; 
+	pointer-events: none;
 }
 
 .disabledComa{
 	--decimal-color: rgb(81, 79, 79);
 	--cursor: not-allowed;
+	pointer-events: none;
 }
 
 #decimal{
@@ -142,4 +145,11 @@ h1 span{
 .disabledNumbers{
 	--numbers-color: rgb(81, 79, 79);
 	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.disabledEqual{
+	--equal-color: rgb(81, 79, 79);
+	cursor: not-allowed;
+	pointer-events: none;
 }
