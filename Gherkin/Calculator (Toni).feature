@@ -5,6 +5,8 @@ Background:
     
 Scenario: Default display screen
 Then in the display screen should be show a 0
+And no button should be highlighted
+And all buttons should be enabled except +/- and 0
 
 Scenario Outline: Clicking non-operators screen buttons
 Given in the display screen the number <numberOnScreen> is shown
@@ -82,6 +84,14 @@ Examples:
 |   -  |
 |   /  |
 |   *  |
+
+Scenario: Doing an operation with keyboard
+Given the user opens the app
+And the user presses the 2 key
+And the user presses the + key
+And the user presses the 3 key
+When the user presses the enter key
+Then the display should show a 5
 
 Scenario Outline: Writing numbers 
 Given in the display screen the number <numberOnScreen> is shown
@@ -168,7 +178,7 @@ Examples:
 |         13,14|    *    |       2,781|        2,781|
 |            84|    /    |        -4,3|         -4,3|
 
-Scenario Outline: Performing two number operations with a result number with more than 10 digits
+Scenario Outline: Performing two number operations with a result number with more than 10 nondecimal digits
 Given in the display screen the number 9999999999 is shown
 When the user press <operator>
 And the user writes the number: <secondNumber>
@@ -184,8 +194,13 @@ Examples:
 
 Scenario: Clicking the C button
 Given the user opens the Calculator
-When I click the C button
-Then the Calculator resets
+When the user clicks the C button
+Then the Calculator display returns to the default
+
+Scenario: Pressing the escape key
+Given the user opens the Calculator
+When the user presses the escape key
+Then the Calculator display returns to the default
 
 Scenario Outline: Clicking two different operation buttons
 Given in the display screen the number <firstNumber> is shown
@@ -274,9 +289,9 @@ And the user writes 23
 And the user presses the = 
 Then the display screen should show -23
 
-Scenario: Button Disabled
+Scenario: Button Disabled -> Do it on Figma
 Given in the display screen the -123456789,5 is shown
-When I hover over a numerical button
+When the user hovers over a numerical button
 Then the cursor does not change to a clicking cursor
 
 Scenario Outline: Disabling buttons
@@ -293,6 +308,18 @@ Examples:
 Scenario: Disabling the second comma
 Given in the display screen the number 3,141592 is shown
 Then the comma button is disabled
+
+Scenario Outline: Disabling the changing signs button
+Given the user opens the app
+When the user clicks the sequence of buttons <sequence>
+Then the changing signs should be disabled
+
+Example:
+|sequence|
+|     0  |
+|    0 , |
+|  2 +   |
+| 1 / 0 =|
 
 Scenario Outline: Disabling because of error
 Given the user opens the app
@@ -312,7 +339,7 @@ Example:
 Scenario Outline: Reenabling buttons with no error
 Given there are unabled buttons
 And no ERROR on the display screen
-When I click on the button <button>
+When the user clicks on the button <button>
 Then all buttons are enabled again
 
 Examples:
@@ -327,7 +354,7 @@ Examples:
 Scenario: Reenabling buttons with error
 Given there are unabled buttons
 And there is an ERROR on the display screen
-When I click on the button C
+When the user clicks on the button C
 Then all buttons are enabled again
 
 Scenario Outline: Showing the first number after pressing operation

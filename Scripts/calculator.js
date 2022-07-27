@@ -3,23 +3,18 @@ document.addEventListener('keydown', (event) => {
 	//var codeValue = event.code;
 	event.preventDefault();
 
+	let currentDisplay = document.getElementById("calculatorDisplay").innerHTML;
+
 	if(keyValue == "Escape"){
 		clearDisplay("0");		
 	} else if(keyValue == "Enter"){
 		calculateResult("=");
 	} else if(keyValue == "Control"){
-		changeSign();
-	} else if(keyValue == ","){
-		takeValue(keyValue);
-	} else if(keyValue == "+"){
-		takeValue(keyValue);
-	} else if(keyValue == "-"){
-		takeValue(keyValue);
-	} else if(keyValue == "*"){
-		takeValue(keyValue);
-	} else if(keyValue == "/"){
-		takeValue(keyValue);
-	} else if(keyValue >= 0 && keyValue <= 9){
+		if (currentDisplay != "ERROR"){
+			changeSign();
+		}
+	} else if((keyValue == "," || keyValue == "+" || keyValue == "-" || keyValue == "*" 
+				|| keyValue == "/" || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
 		takeValue(keyValue);
 	}
    
@@ -28,22 +23,26 @@ document.addEventListener('keydown', (event) => {
   }, false);
 
 var multipleOperation = false;
-
+var previousKey = "";
 
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
 	if((x >= 0 && x <= 9 || x == ",") && (display.innerHTML != "ERROR")){
 		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
-			console.log("aqui maquina")
 			removeComaHighlight();
+			removeChangeSignHighlight();
 			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
+			if(x == 0){
+				highlightChangeSign();
+			}
 		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
 				 (display.innerHTML.length == 10 && display.innerHTML.includes("-"))){
 			if(x == ","){
 				addComa();
 			} else{
+				removeChangeSignHighlight();
 				display.innerHTML += x;
 			}
 		}
@@ -54,18 +53,23 @@ function takeValue(x){
 	} else{
 		operatorsManagement(x);
 	}
+	previousKey = x;
 }
 
 function operatorsManagement(operatorValue){
+	highlightChangeSign();
 	removeOperatorsHighlight();
 	document.getElementById(operatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
 		getFirstvalue(operatorValue);
-	} else if(secondNumber != 0 || (secondNumber == 0 && (operatorSign == "/" || operatorSign == "*"))){    //--> aquí está la clave de la solución 
+	} else if(secondNumber != 0 || ((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorValue != previousKey))){    //--> aquí está la clave de la solución 
+		console.log("manolo cabesabolo")
+
 		calculateResult(operatorValue);
 		multipleOperation = true;
 		operatorSign = operatorValue;
 	} else{
+		console.log("manolo lama the champion")
 		operatorSign = operatorValue;
 	}
 }
@@ -85,7 +89,6 @@ function getSecondValue(keyValue){
 			display.innerHTML = "0,"
 			highlightComma();
 		} else{
-			console.log("aqui maquina???????????")
 			display.innerHTML = "";
 			display.innerHTML = keyValue;
 		}
@@ -94,8 +97,11 @@ function getSecondValue(keyValue){
 }
 
 function addComa(){
+	removeChangeSignHighlight();
 	if(firstNumber == 0){
 		firstNumber = "0,"
+		console.log("manolo")
+		highlightChangeSign();
 	}
 	let display = document.getElementById('calculatorDisplay');
 	if(display.innerHTML == 0){
@@ -184,6 +190,11 @@ function highlightNumbers(){
 	}
 }
 
+function highlightChangeSign(){
+	document.getElementById("changeSign").classList.add("disabledChangeSign");
+	document.getElementById("changeSign").disabled = true;
+}
+
 /*
 function highlightAllOperators(){
 	let changeClass = document.getElementsByClassName('operators');
@@ -218,6 +229,11 @@ function removeNumbersHighlight(){
 	}
 }
 
+function removeChangeSignHighlight(){
+	document.getElementById("changeSign").classList.remove("disabledChangeSign");
+	document.getElementById("changeSign").disabled = false;
+}
+
 function removeAllHighlights(){
 	removeOperatorsHighlight();
 	removeComaHighlight();
@@ -237,16 +253,17 @@ function deleteCharacter(){
 
 /* ----- Calculation functions ------ */
 
-var firstNumber = 0
-var operatorSign = ""
-var secondNumber = 0
+var firstNumber = 0;
+var operatorSign = "";
+var secondNumber = 0;
 
 function calculateResult(keyValue){
 
-	if(secondNumber == 0){ 			// --> si fas 10 = et pilla el 2n com a 0 i per això mostra 0
+	console.log(firstNumber, operatorSign, secondNumber)
+
+	if(secondNumber == 0 && operatorSign != ""){
 		removeOperatorsHighlight();
 		document.getElementById('calculatorDisplay').innerHTML = 0;
-		console.log("entra")
 	}
 
 
