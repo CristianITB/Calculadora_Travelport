@@ -3,8 +3,7 @@ Given in the display screen the number 23 is shown
 And the user press +
 And the user press the = 
 Then the display screen should show ERROR
-(l. 264) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
-
+(l. 279) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
 
 
 
@@ -17,3 +16,6 @@ quan tens error a pantalla, amb clicks no pots donar-li pq està disabled, però
                     else if amb take value, simplement ho he posat en "or ||")
 
 si fas 8 + ctrl 2 hauria de ser -6 i dona 10, es a dir no canvia el signe
+
+
+//////////////sin mas
