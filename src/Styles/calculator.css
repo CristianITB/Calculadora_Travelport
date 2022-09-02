@@ -1,0 +1,161 @@
+body {
+	background-color: #000;
+}
+
+#calculatorContainer{
+	text-align: center;
+	width: 13.375em;
+	margin: 0 auto;
+}
+
+h1{
+	text-align: center;
+	color: white;
+	font-size: 4em;
+	margin-bottom: 0;
+	margin-top: 5%;
+	transition: all .8s;
+}
+
+h1:hover{
+	font-size: 4.5em;
+}
+
+h1 span{
+	color: #fd7202;
+}
+
+#calculatorContainer button{
+	width: 3.125rem;
+	height: 3.125rem;
+	margin: 2px 0;
+	transition: all .5s;
+	font-weight: bold;
+	border: 1px solid white;
+}
+
+.numbers{
+	background-color: var(--numbers-color);
+	cursor: var(--cursor);
+}
+
+#calculatorContainer button:hover{
+	font-size: 1.1em;
+	background-color: rgb(201, 190, 190);
+}
+
+/*
+#backSpace{
+	background-color: black;
+	padding: 0;
+	font-size: 50.5px; 
+	color: grey;
+	cursor: pointer;
+	transition: all .5s;
+}
+
+#backSpace:hover{
+	color: rgb(186, 179, 179);
+}
+*/
+
+#calculatorDisplay{
+	height: 3.125rem;
+	width: 100%;
+	background-color: #999;
+	color: #fff;
+	padding: 0.75rem 1.25rem;
+    margin-top: 2.8125rem;
+    margin-bottom: 0.25rem;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #777;
+	transition: all .5s;
+	text-align: right;
+}
+
+
+#calculatorContainer #equalButton{
+	height: 3.125rem;
+	width: 6.500rem;
+	background-color: var(--equal-color);
+	color: #fff;
+	border: 1px solid #fd7202;
+}
+
+#calculatorContainer #equalButton:hover{
+	background-color: #f8923e;
+}
+
+#calculatorContainer #clearButton{
+	width: 6.500rem;
+	background-color: red;
+	color: #fff;
+	border: 1px solid red;
+	transition: all .5s;
+}
+
+#calculatorContainer #clearButton:hover{
+	font-size: 0.9em;
+	background-color: rgb(236, 69, 69);
+	cursor: var(--cursor);
+}
+
+#calculatorContainer .operators{
+	background-color: var(--operator-color);
+	color: #fff;
+	border: 1px solid green;
+	cursor: var(--cursor);
+}
+
+#calculatorContainer .operators:hover{
+	font-size: 1.1em;
+	background-color: rgb(16, 180, 16);
+}
+
+:root{
+	--operator-color: green;
+	--decimal-color: white;
+	--numbers-color: white;
+	--equal-color: #fd7202;
+	--cursor: pointer;
+}
+
+.highlightOperator{
+	--operator-color: rgb(16, 180, 16);
+}
+
+.disabledOperators{
+	--operator-color: rgb(81, 79, 79);
+	--cursor: not-allowed; 
+	pointer-events: none;
+}
+
+.disabledComa{
+	--decimal-color: rgb(81, 79, 79);
+	--cursor: not-allowed;
+	pointer-events: none;
+}
+
+#decimal{
+	background-color: var(--decimal-color);
+	cursor: var(--cursor);
+}
+
+.disabledNumbers{
+	--numbers-color: rgb(81, 79, 79);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.disabledEqual{
+	--equal-color: rgb(81, 79, 79);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.disabledChangeSign{
+	--operator-color: rgb(81, 79, 79);
+	cursor: not-allowed;
+	pointer-events: none;
+}
