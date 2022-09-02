@@ -15,7 +15,7 @@
 		</header>
 		<div id="calculatorContainer">
 
-			<p id="calculatorDisplay">0</p>
+			<p id="calculatorDisplay" data-testid="display">0</p>
 			<!--
 			<i id="backSpace" onclick="deleteCharacter()" class="material-icons">backspace</i>
 			-->
@@ -23,23 +23,23 @@
 			<!--
 			<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
 			-->
-			<button id="one" class="numbers" value="1" onclick="takeValue(document.getElementById('one').value)">1</button>
-			<button id="two" class="numbers" value="2" onclick="takeValue(document.getElementById('two').value)">2</button>
-			<button id="three" class="numbers" value="3" onclick="takeValue(document.getElementById('three').value)">3</button>
-			<button class="operators" value="+" id="+" onclick="highlightOperator(event), takeValue(this.value)">+</button>
+			<button id="one" class="numbers" value="1" data-testid="1" onclick="takeValue(document.getElementById('one').value)">1</button>
+			<button id="two" class="numbers" value="2" data-testid="2" onclick="takeValue(document.getElementById('two').value)">2</button>
+			<button id="three" class="numbers" value="3" data-testid="3" onclick="takeValue(document.getElementById('three').value)">3</button>
+			<button class="operators" value="+" id="+" data-testid="+" onclick="highlightOperator(event), takeValue(this.value)">+</button>
 			<!--
 			<button class="operators" value="+" onclick="takeValue(this.value)">+</button>
 			-->
 
-			<button id="four" class="numbers" value="4" onclick="takeValue(document.getElementById('four').value)">4</button>
-			<button id="five" class="numbers" value="5" onclick="takeValue(document.getElementById('five').value)">5</button>
-			<button id="six" class="numbers" value="6" onclick="takeValue(document.getElementById('six').value)">6</button>
+			<button id="four" class="numbers" value="4" data-testid="4" onclick="takeValue(document.getElementById('four').value)">4</button>
+			<button id="five" class="numbers" value="5" data-testid="5" onclick="takeValue(document.getElementById('five').value)">5</button>
+			<button id="six" class="numbers" value="6" data-testid="6" onclick="takeValue(document.getElementById('six').value)">6</button>
 			<button class="operators" value="-" id="-" onclick="highlightOperator(event),takeValue(this.value)">-</button>
 
-			<button id="seven" class="numbers" value="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
-			<button id="eight" class="numbers" value="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
-			<button id="nine" class="numbers" value="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
-			<button class="operators" value="*" id="*" onclick="highlightOperator(event), takeValue(this.value)">*</button>
+			<button id="seven" class="numbers" value="7" data-testid="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
+			<button id="eight" class="numbers" value="8" data-testid="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
+			<button id="nine" class="numbers" value="9" data-testid="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
+			<button class="operators" value="*" id="*" data-testid="" onclick="highlightOerator(event), takeValue(this.value)">*</button>
 
 			<button id="zero" class="numbers" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
 			<button id="decimal" value="," onclick="takeValue(this.value)">,</button>
