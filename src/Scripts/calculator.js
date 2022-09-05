@@ -62,14 +62,11 @@ function operatorsManagement(operatorValue){
 	document.getElementById(operatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
 		getFirstvalue(operatorValue);
-	} else if(secondNumber != 0 || ((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorValue != previousKey))){    //--> aquí está la clave de la solución 
-		console.log("manolo cabesabolo")
-
+	} else if(secondNumber != 0 || ((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorSign != previousKey))){    //--> aquí está la clave de la solución 
 		calculateResult(operatorValue);
 		multipleOperation = true;
 		operatorSign = operatorValue;
 	} else{
-		console.log("manolo lama the champion")
 		operatorSign = operatorValue;
 	}
 }
@@ -100,7 +97,6 @@ function addComa(){
 	removeChangeSignHighlight();
 	if(firstNumber == 0){
 		firstNumber = "0,"
-		console.log("manolo")
 		highlightChangeSign();
 	}
 	let display = document.getElementById('calculatorDisplay');
@@ -259,13 +255,10 @@ var secondNumber = 0;
 
 function calculateResult(keyValue){
 
-	console.log(firstNumber, operatorSign, secondNumber)
-
 	if(secondNumber == 0 && operatorSign != ""){
 		removeOperatorsHighlight();
 		document.getElementById('calculatorDisplay').innerHTML = 0;
 	}
-
 
 	var operationResult = 0;
 
@@ -428,27 +421,18 @@ function checkCommas(){
 function checkResultLength(result){
 	let error = false;
 	
-	//console.log(result)
-	//console.log(typeof(result))     //ejemplo del 84 / 4,3
 	if(result.toString().includes(",")){
-		//console.log(parseFloat(replaceComma(result)) + " parsed");
 		result = parseFloat(replaceComma(result));
 	}
-	//console.log(Math.abs(result))
-	//console.log(Math.abs(result).toString().length)
 
 
 	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes("."))){
-		console.log("Todo correcto makina")
 		error = false;
 	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(".")){
-		console.log("A este le tienes qe cortar decimales")
 		return cutDecimals(result);
 	} else if (Math.abs(result).toString().length >= 11 && result.toString().includes(".") == false){
-		console.log("Este num es demasiado grande")
 		error = true;
 	} else{
-		console.log("lol")
 	}
 
 	if(result.length >= 10){

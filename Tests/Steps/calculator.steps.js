@@ -9,7 +9,6 @@ Given('a user opens the app', async () => {
 await page.goto(url);
 });
 
-
 Then('the display screen should show the following value: {string}', async function (string) {
 // Write code here that turns the phrase above into concrete actions
 //return 'pending';

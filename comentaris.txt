@@ -6,16 +6,4 @@ Then the display screen should show ERROR
 (l. 279) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
 
 
-
-bug en la l.63 en que si vas presionando los operadores, con + - * no pasa nada pero con / si pq te pilla como div by 0
-tbien si haces 5 * * te lo pone a 0...... --> ARREGLAT AMB AIXO (&& operatorValue != previousKey) pero no m'acaba d'agradar
-crec qe en algun escenari random podria donar error;
-
-quan tens error a pantalla, amb clicks no pots donar-li pq està disabled, però amb el teclat si xd
-    -----> ARREGLAT (a més he fet un refactor d'on pillava les tecles i on tenia varios
-                    else if amb take value, simplement ho he posat en "or ||")
-
 si fas 8 + ctrl 2 hauria de ser -6 i dona 10, es a dir no canvia el signe
-
-
-//////////////sin mas
