@@ -34,20 +34,20 @@
 			<button id="four" class="numbers" value="4" data-testid="4" onclick="takeValue(document.getElementById('four').value)">4</button>
 			<button id="five" class="numbers" value="5" data-testid="5" onclick="takeValue(document.getElementById('five').value)">5</button>
 			<button id="six" class="numbers" value="6" data-testid="6" onclick="takeValue(document.getElementById('six').value)">6</button>
-			<button class="operators" value="-" id="-" onclick="highlightOperator(event),takeValue(this.value)">-</button>
+			<button class="operators" value="-" id="-" data-testid="-" onclick="highlightOperator(event),takeValue(this.value)">-</button>
 
 			<button id="seven" class="numbers" value="7" data-testid="7" onclick="takeValue(document.getElementById('seven').value)">7</button>
 			<button id="eight" class="numbers" value="8" data-testid="8" onclick="takeValue(document.getElementById('eight').value)">8</button>
 			<button id="nine" class="numbers" value="9" data-testid="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
-			<button class="operators" value="*" id="*" data-testid="" onclick="highlightOerator(event), takeValue(this.value)">*</button>
+			<button class="operators" value="*" id="*" data-testid="*" onclick="highlightOerator(event), takeValue(this.value)">*</button>
 
-			<button id="zero" class="numbers" value="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
-			<button id="decimal" value="," onclick="takeValue(this.value)">,</button>
-			<button class="operators" id="changeSign" onclick="changeSign()">+/-</button>
-			<button class="operators" value="/" id="/" onclick="highlightOperator(event), takeValue(this.value)">/</button>
+			<button id="zero" class="numbers" value="0" data-testid="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
+			<button id="decimal" value="," data-testid="," onclick="takeValue(this.value)">,</button>
+			<button class="operators" id="changeSign" data-testid="+-" onclick="changeSign()">+/-</button>
+			<button class="operators" value="/" id="/" data-testid="/" onclick="highlightOperator(event), takeValue(this.value)">/</button>
 			
-			<button id="clearButton" value="0" onclick="clearDisplay(document.getElementById('clearButton').value)">Clear</button>
-			<button id="equalButton" value="=" onclick="calculateResult('=')">=</button>
+			<button id="clearButton" value="0" data-testid="C" onclick="clearDisplay(document.getElementById('clearButton').value)">Clear</button>
+			<button id="equalButton" value="=" data-testid="=" onclick="calculateResult('=')">=</button>
 
 		</div>
 	</body>
