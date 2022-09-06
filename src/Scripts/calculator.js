@@ -112,6 +112,12 @@ function addComa(){
 function changeSign(){
 	let display = document.getElementById('calculatorDisplay');
 
+	/*
+	if(["+", "-", "*", "/"].includes(previousKey)){
+		display.innerHTML = "-";
+	}
+	*/
+
 	if(display.innerHTML[display.innerHTML.length-1] == ","){
 		let value = display.innerHTML.slice(0, display.innerHTML.length-1)*-1
 		value += ",";
@@ -234,6 +240,7 @@ function removeAllHighlights(){
 	removeOperatorsHighlight();
 	removeComaHighlight();
 	removeNumbersHighlight();
+	removeChangeSignHighlight();
 }
 
 
