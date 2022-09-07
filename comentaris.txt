@@ -3,11 +3,10 @@ Given in the display screen the number 23 is shown
 And the user press +
 And the user press the = 
 Then the display screen should show ERROR
-(l. 279) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
+(l. 233) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
 
 
-l.312 -> si fas 8 + ctrl 2 hauria de ser -6 i dona 10, es a dir no canvia el signe
-
-l.297 -> Si poses 1234567890 encara pots +/-, pero quan li dones, no se't disabled
 
 deshabilitar el 0 y el +/- al default, whatever
+
+lineas -> 17, 31, 43 cambiado para poder darle al "." y qe salga coma, recordar borrar xd

@@ -11,9 +11,10 @@ document.addEventListener('keydown', (event) => {
 		calculateResult("=");
 	} else if(keyValue == "Control"){
 		if (currentDisplay != "ERROR"){
+			if(!["+", "-", "*", "/"].includes(previousKey))
 			changeSign();
 		}
-	} else if((keyValue == "," || keyValue == "+" || keyValue == "-" || keyValue == "*" 
+	} else if((keyValue == "," || keyValue == "." || keyValue == "+" || keyValue == "-" || keyValue == "*" 
 				|| keyValue == "/" || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
 		takeValue(keyValue);
 	}
@@ -27,19 +28,20 @@ var previousKey = "";
 
 function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
-	if((x >= 0 && x <= 9 || x == ",") && (display.innerHTML != "ERROR")){
+	if((x >= 0 && x <= 9 || x == "," || x == ".") && (display.innerHTML != "ERROR")){
 		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
 			removeComaHighlight();
 			removeChangeSignHighlight();
 			firstNumber = x;
 			display.innerHTML = "";
 			display.innerHTML += x;
+			console.log("aqui")
 			if(x == 0){
 				highlightChangeSign();
 			}
 		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
 				 (display.innerHTML.length == 10 && display.innerHTML.includes("-"))){
-			if(x == ","){
+			if(x == "," || x == "."){
 				addComa();
 			} else{
 				removeChangeSignHighlight();
@@ -57,18 +59,20 @@ function takeValue(x){
 }
 
 function operatorsManagement(operatorValue){
-	highlightChangeSign();
+	console.log(firstNumber + " first")
+	console.log(secondNumber + " sec")
 	removeOperatorsHighlight();
 	document.getElementById(operatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
 		getFirstvalue(operatorValue);
-	} else if(secondNumber != 0 || ((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorSign != previousKey))){    //--> aquí está la clave de la solución 
+	} else if(secondNumber != 0 || (((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorSign != previousKey)))){    //--> aquí está la clave de la solución 		
 		calculateResult(operatorValue);
 		multipleOperation = true;
 		operatorSign = operatorValue;
 	} else{
 		operatorSign = operatorValue;
 	}
+	highlightChangeSign();
 }
 
 function getFirstvalue(keyValue){
@@ -111,12 +115,6 @@ function addComa(){
 
 function changeSign(){
 	let display = document.getElementById('calculatorDisplay');
-
-	/*
-	if(["+", "-", "*", "/"].includes(previousKey)){
-		display.innerHTML = "-";
-	}
-	*/
 
 	if(display.innerHTML[display.innerHTML.length-1] == ","){
 		let value = display.innerHTML.slice(0, display.innerHTML.length-1)*-1
@@ -262,16 +260,25 @@ var secondNumber = 0;
 
 function calculateResult(keyValue){
 
+	//esto es lo qe tenias antes de querer arreglar lo de 23 + = -> ERROR
+	
 	if(secondNumber == 0 && operatorSign != ""){
 		removeOperatorsHighlight();
 		document.getElementById('calculatorDisplay').innerHTML = 0;
 	}
 
+
 	var operationResult = 0;
 
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
-
-	if(operatorSign == '+'){
+	/*if(secondNumber == 0){
+		console.log("gola")
+		highlightAllOperators();
+		highlightNumbers();
+		highlightComma();
+		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+	}
+	else*/ if(operatorSign == '+'){
 		operationResult = calculateSum();
 	} else if(operatorSign == '-'){
 		operationResult = calculateSubtraction();
@@ -328,7 +335,6 @@ function calculateSum(){
 		highlightComma();
 		highlightNumbers();
 	} 
-
 	return sum;
 }
 
