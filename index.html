@@ -41,13 +41,13 @@
 			<button id="nine" class="numbers" value="9" data-testid="9" onclick="takeValue(document.getElementById('nine').value)">9</button>
 			<button class="operators" value="*" id="*" data-testid="*" onclick="highlightOperator(event), takeValue(this.value)">*</button>
 
-			<button id="zero" class="numbers" value="0" data-testid="0" onclick="takeValue(document.getElementById('zero').value)">0</button>
+			<button id="zero" class="numbers disabledZero" value="0" data-testid="0" onclick="takeValue(document.getElementById('zero').value)" disabled>0</button>
 			<button id="decimal" value="," data-testid="," onclick="takeValue(this.value)">,</button>
-			<button class="operators" id="changeSign" data-testid="+-" onclick="changeSign()">+/-</button>
+			<button class="operators disabledChangeSign" id="changeSign" data-testid="+-" onclick="changeSign()" disabled>+/-</button>
 			<button class="operators" value="/" id="/" data-testid="/" onclick="highlightOperator(event), takeValue(this.value)">/</button>
 			
 			<button id="clearButton" value="0" data-testid="C" onclick="clearDisplay(document.getElementById('clearButton').value)">Clear</button>
-			<button id="equalButton" value="=" data-testid="=" onclick="calculateResult('=')">=</button>
+			<button id="equalButton" value="=" data-testid="=" onclick="ableToCalculate('=')">=</button>
 
 		</div>
 	</body>

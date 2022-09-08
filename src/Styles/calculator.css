@@ -159,3 +159,9 @@ h1 span{
 	cursor: not-allowed;
 	pointer-events: none;
 }
+
+.disabledZero{
+	--numbers-color: rgb(81, 79, 79);
+	cursor: not-allowed;
+	pointer-events: none;
+}

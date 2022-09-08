@@ -8,7 +8,7 @@ document.addEventListener('keydown', (event) => {
 	if(keyValue == "Escape"){
 		clearDisplay("0");		
 	} else if(keyValue == "Enter"){
-		calculateResult("=");
+		ableToCalculate();
 	} else if(keyValue == "Control"){
 		if (currentDisplay != "ERROR"){
 			if(!["+", "-", "*", "/"].includes(previousKey))
@@ -30,21 +30,22 @@ function takeValue(x){
 	let display = document.getElementById('calculatorDisplay');
 	if((x >= 0 && x <= 9 || x == "," || x == ".") && (display.innerHTML != "ERROR")){
 		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
-			removeComaHighlight();
-			removeChangeSignHighlight();
-			firstNumber = x;
-			display.innerHTML = "";
-			display.innerHTML += x;
-			console.log("aqui")
-			if(x == 0){
-				highlightChangeSign();
+			if(x != 0){
+				removeComaHighlight();
+				removeChangeSignHighlight();
+				removeZeroHighlight();
+				firstNumber = x;
+				display.innerHTML = "";
+				display.innerHTML += x;
 			}
+
 		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
 				 (display.innerHTML.length == 10 && display.innerHTML.includes("-"))){
 			if(x == "," || x == "."){
 				addComa();
 			} else{
 				removeChangeSignHighlight();
+				removeZeroHighlight();
 				display.innerHTML += x;
 			}
 		}
@@ -59,16 +60,18 @@ function takeValue(x){
 }
 
 function operatorsManagement(operatorValue){
-	console.log(firstNumber + " first")
-	console.log(secondNumber + " sec")
 	removeOperatorsHighlight();
 	document.getElementById(operatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
 		getFirstvalue(operatorValue);
 	} else if(secondNumber != 0 || (((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorSign != previousKey)))){    //--> aquí está la clave de la solución 		
-		calculateResult(operatorValue);
-		multipleOperation = true;
-		operatorSign = operatorValue;
+		if(gotSecondValue == true){
+			calculateResult(operatorValue);
+			multipleOperation = true;
+			operatorSign = operatorValue;
+		} else{
+			displayError();
+		}
 	} else{
 		operatorSign = operatorValue;
 	}
@@ -82,7 +85,9 @@ function getFirstvalue(keyValue){
 	document.getElementById(keyValue).classList.add("highlightOperator");
 }
 
+var gotSecondValue = false;
 function getSecondValue(keyValue){
+	gotSecondValue = true;
 	let display = document.getElementById('calculatorDisplay');
 	if(secondNumber == 0){
 		removeAllHighlights();
@@ -94,6 +99,14 @@ function getSecondValue(keyValue){
 			display.innerHTML = keyValue;
 		}
 		secondNumber = display.innerHTML;
+	}
+}
+
+function ableToCalculate(){
+	if(gotSecondValue == true || (gotSecondValue == false && operatorSign == false)){
+		calculateResult("=");
+	} else{
+		displayError();
 	}
 }
 
@@ -143,6 +156,8 @@ function replaceDot(valueToChange){
 function clearDisplay(x){
 	removeAllHighlights();
 	cleanTemporaryVars();
+	highlightZero();
+	highlightChangeSign();
 	document.getElementById('calculatorDisplay').innerHTML = x;
 }
 
@@ -241,6 +256,16 @@ function removeAllHighlights(){
 	removeChangeSignHighlight();
 }
 
+function highlightZero(){
+	document.getElementById("zero").classList.add("disabledZero");
+	document.getElementById("zero").disabled = true;
+}
+
+function removeZeroHighlight(){
+	document.getElementById("zero").classList.remove("disabledZero");
+	document.getElementById("zero").disabled = false;
+}
+
 
 /* ---- Function about the backspace, but it was erased ftm ---- */
 function deleteCharacter(){
@@ -271,14 +296,8 @@ function calculateResult(keyValue){
 	var operationResult = 0;
 
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
-	/*if(secondNumber == 0){
-		console.log("gola")
-		highlightAllOperators();
-		highlightNumbers();
-		highlightComma();
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
-	}
-	else*/ if(operatorSign == '+'){
+	
+	if(operatorSign == '+'){
 		operationResult = calculateSum();
 	} else if(operatorSign == '-'){
 		operationResult = calculateSubtraction();
@@ -328,12 +347,9 @@ function calculateSum(){
 		if(error != false){
 			sum = error;
 		}
-		document.getElementById('calculatorDisplay').innerHTML = sum;
+		document.getElementById('calculatorDisplay').innerHTML = sum;	
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
-		highlightAllOperators();
-		highlightComma();
-		highlightNumbers();
+		displayError();
 	} 
 	return sum;
 }
@@ -354,10 +370,7 @@ function calculateSubtraction(){
 		}
 		document.getElementById('calculatorDisplay').innerHTML = substraction;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
-		highlightAllOperators();
-		highlightComma();
-		highlightNumbers();
+		displayError();
 	} 
 	return substraction;
 }
@@ -378,10 +391,7 @@ function calculateMultiplication(){
 		}
 		document.getElementById('calculatorDisplay').innerHTML = mult;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
-		highlightAllOperators();
-		highlightComma();
-		highlightNumbers();
+		displayError();
 	} 
 	return mult;
 }
@@ -408,10 +418,7 @@ function calculateDivision(){
 		}
 		document.getElementById('calculatorDisplay').innerHTML = div;
 	} else{
-		document.getElementById('calculatorDisplay').innerHTML = "ERROR";
-		highlightAllOperators();
-		highlightComma();
-		highlightNumbers();
+		displayError();
 	} 
 	return div;
 }
@@ -420,6 +427,14 @@ function cleanTemporaryVars(){
 	firstNumber = 0;
 	secondNumber = 0;
 	operatorSign = "";
+	gotSecondValue = false;
+}
+
+function displayError(){
+	document.getElementById('calculatorDisplay').innerHTML = "ERROR";
+	highlightAllOperators();
+	highlightComma();
+	highlightNumbers();
 }
 
 function checkCommas(){

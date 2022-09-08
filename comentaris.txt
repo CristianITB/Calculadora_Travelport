@@ -6,7 +6,4 @@ Then the display screen should show ERROR
 (l. 233) aixo jo no ho faig, jo poso el 23...trobo qe te inchorencia amb el cas de despres
 
 
-
-deshabilitar el 0 y el +/- al default, whatever
-
 lineas -> 17, 31, 43 cambiado para poder darle al "." y qe salga coma, recordar borrar xd
