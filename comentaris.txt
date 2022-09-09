@@ -7,3 +7,4 @@ Then the display screen should show ERROR
 
 
 lineas -> 17, 31, 43 cambiado para poder darle al "." y qe salga coma, recordar borrar xd
+

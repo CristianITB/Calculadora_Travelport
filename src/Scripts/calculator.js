@@ -1,6 +1,5 @@
 document.addEventListener('keydown', (event) => {
 	var keyValue = event.key;
-	//var codeValue = event.code;
 	event.preventDefault();
 
 	let currentDisplay = document.getElementById("calculatorDisplay").innerHTML;
@@ -18,9 +17,6 @@ document.addEventListener('keydown', (event) => {
 				|| keyValue == "/" || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
 		takeValue(keyValue);
 	}
-   
-	//console.log("keyValue: " + keyValue);
-	//console.log("codeValue: " + codeValue);
   }, false);
 
 var multipleOperation = false;
@@ -38,9 +34,9 @@ function takeValue(x){
 				display.innerHTML = "";
 				display.innerHTML += x;
 			}
-
 		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
-				 (display.innerHTML.length == 10 && display.innerHTML.includes("-"))){
+				 (display.innerHTML.length == 10 && display.innerHTML.includes("-")) || 
+				 (display.innerHTML.length == 11 && display.innerHTML.includes("-") && display.innerHTML.includes(","))){
 			if(x == "," || x == "."){
 				addComa();
 			} else{
@@ -120,7 +116,7 @@ function addComa(){
 	if(display.innerHTML == 0){
 		display.innerHTML = "0,"
 		highlightComma();
-	} else if(display.innerHTML.includes(",") == false && display.innerHTML.length < 10){
+	} else if(display.innerHTML.includes(",") == false && Math.abs(display.innerHTML).toString().length < 10){
 		display.innerHTML += ",";
 		highlightComma();
 	}
@@ -128,7 +124,6 @@ function addComa(){
 
 function changeSign(){
 	let display = document.getElementById('calculatorDisplay');
-
 	if(display.innerHTML[display.innerHTML.length-1] == ","){
 		let value = display.innerHTML.slice(0, display.innerHTML.length-1)*-1
 		value += ",";
@@ -163,16 +158,17 @@ function clearDisplay(x){
 
 function checkLength(){
 	let display = document.getElementById('calculatorDisplay');
+	replaceComma(display.innerHTML)
 	if(
-		(display.innerHTML.length == 10 && display.innerHTML.includes(",") == false && display.innerHTML.includes("-") == false) ||
-	    (display.innerHTML.length == 11 && display.innerHTML.includes(",") == false && display.innerHTML.includes("-") == true) ||
-	    (display.innerHTML.length == 11 && display.innerHTML.includes(",") == true && display.innerHTML.includes("-") == false) ||
-		(display.innerHTML.length == 12 && display.innerHTML.includes(",") == true && display.innerHTML.includes("-") == true)
+		(Math.abs(display.innerHTML).toString().length == 10 && display.innerHTML.includes(",") == false) ||
+	    (Math.abs(replaceComma(display.innerHTML)).toString().length == 11 && display.innerHTML.includes(",") == true)
 	){
 		highlightComma();
 		highlightNumbers();
 	}
 }
+
+/* ----- Highlight functions ----- */
 
 function highlightOperator(x){
 	removeAllHighlights();
@@ -181,7 +177,6 @@ function highlightOperator(x){
 }
 
 function highlightAllOperators(){
-	//Actually, when we need to disable all the operators, we do also need to disable de "=" button;
 	let changeClass = document.getElementsByClassName('operators');
 	for(let i = 0; i < changeClass.length; i++){
 		changeClass[i].classList.add('disabledOperators');
@@ -198,7 +193,6 @@ function highlightComma(){
 
 function highlightNumbers(){
 	let numbers = document.getElementsByClassName("numbers");
-
 	for(let i = 0; i < numbers.length; i++){
 		numbers[i].classList.add("disabledNumbers");
 		numbers[i].disabled = true;
@@ -209,15 +203,6 @@ function highlightChangeSign(){
 	document.getElementById("changeSign").classList.add("disabledChangeSign");
 	document.getElementById("changeSign").disabled = true;
 }
-
-/*
-function highlightAllOperators(){
-	let changeClass = document.getElementsByClassName('operators');
-	for(let i = 0; i < changeClass.length; i++){
-		changeClass[i].classList.add('disabledoperators');
-	}
-}
-*/
 
 function removeOperatorsHighlight(){
 	let changeClass = document.getElementsByClassName('operators');
@@ -231,9 +216,8 @@ function removeOperatorsHighlight(){
 } 
 
 function removeComaHighlight(){
-	let coma = document.getElementById("decimal");
-	coma.classList.remove("disabledComa")
-	coma.disabled = false;
+	document.getElementById("decimal").classList.remove("disabledComa");
+	document.getElementById("decimal").disabled = false;
 }
 
 function removeNumbersHighlight(){
@@ -266,35 +250,20 @@ function removeZeroHighlight(){
 	document.getElementById("zero").disabled = false;
 }
 
-
-/* ---- Function about the backspace, but it was erased ftm ---- */
-function deleteCharacter(){
-	let display = document.getElementById('calculatorDisplay');
-	display.innerHTML = display.innerHTML.slice(0, display.innerHTML.length-1);
-	if(display.innerHTML == ""){
-		display.innerHTML = "0";
-	}
-}
-
-
 /* ----- Calculation functions ------ */
 
 var firstNumber = 0;
 var operatorSign = "";
 var secondNumber = 0;
 
-function calculateResult(keyValue){
+function calculateResult(keyValue){	
 
-	//esto es lo qe tenias antes de querer arreglar lo de 23 + = -> ERROR
-	
 	if(secondNumber == 0 && operatorSign != ""){
 		removeOperatorsHighlight();
 		document.getElementById('calculatorDisplay').innerHTML = 0;
 	}
 
-
 	var operationResult = 0;
-
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
 	
 	if(operatorSign == '+'){
@@ -321,10 +290,9 @@ function calculateResult(keyValue){
 		}
 	}
 
-	firstNumber = operationResult;
-	secondNumber = 0;
-
 	if(keyValue != "="){
+		firstNumber = operationResult;
+		secondNumber = 0;
 		multipleOperation = true;
 	} else{
 		cleanTemporaryVars();
@@ -333,7 +301,6 @@ function calculateResult(keyValue){
 }
 
 function calculateSum(){
-
 	checkCommas();
 	let sum = (parseFloat(firstNumber) + parseFloat(secondNumber))
 
@@ -341,16 +308,9 @@ function calculateSum(){
 		sum = replaceDot(sum.toString());
 	}
 
-	let error = checkResultLength(sum);
+	let errorCheck = checkResultLength(sum);  //errorCheck can be a Boolean or the number with the decimals cut; JavaScript advantatges.
 
-	if(error != true){
-		if(error != false){
-			sum = error;
-		}
-		document.getElementById('calculatorDisplay').innerHTML = sum;	
-	} else{
-		displayError();
-	} 
+	interpretateError(errorCheck, sum);
 	return sum;
 }
 
@@ -362,16 +322,9 @@ function calculateSubtraction(){
 		substraction = replaceDot(substraction.toString());
 	}
 
-	let error = checkResultLength(substraction);
+	let errorCheck = checkResultLength(substraction);
 
-	if(error != true){
-		if(error != false){
-			substraction = error;
-		}
-		document.getElementById('calculatorDisplay').innerHTML = substraction;
-	} else{
-		displayError();
-	} 
+	interpretateError(errorCheck, substraction);
 	return substraction;
 }
 
@@ -383,16 +336,9 @@ function calculateMultiplication(){
 		mult = replaceDot(mult.toString());
 	}
 
-	let error = checkResultLength(mult);
+	let errorCheck = checkResultLength(mult);
 
-	if(error != true){
-		if(error != false){
-			mult = error;
-		}
-		document.getElementById('calculatorDisplay').innerHTML = mult;
-	} else{
-		displayError();
-	} 
+	interpretateError(errorCheck, mult);
 	return mult;
 }
 
@@ -404,23 +350,25 @@ function calculateDivision(){
 		div = replaceDot(div.toString());
 	}
 
-	//puedo hacer que dentro de check result length me checkee la long y de error o no, y ademas me lo corte si fuera necesario;
-
-	let error = checkResultLength(div);
+	let errorCheck = checkResultLength(div);
 
 	if(secondNumber == 0){
-		error = true;
+		errorCheck = true;
 	}
 
-	if(error != true){
-		if(error != false){
-			div = error;
+	interpretateError(errorCheck, div);
+	return div;
+}
+
+function interpretateError(errorCheck, operationResult){
+	if(errorCheck != true){
+		if(errorCheck != false){
+			operationResult = errorCheck;
 		}
-		document.getElementById('calculatorDisplay').innerHTML = div;
+		document.getElementById('calculatorDisplay').innerHTML = operationResult;
 	} else{
 		displayError();
 	} 
-	return div;
 }
 
 function cleanTemporaryVars(){
@@ -453,46 +401,33 @@ function checkResultLength(result){
 		result = parseFloat(replaceComma(result));
 	}
 
-
 	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes("."))){
 		error = false;
 	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(".")){
 		return cutDecimals(result);
 	} else if (Math.abs(result).toString().length >= 11 && result.toString().includes(".") == false){
 		error = true;
-	} else{
 	}
 
-	if(result.length >= 10){
-		if(	(result.length == 10 && result.includes(",") == false && result.includes("-") == false) ||
-			(result.length == 11 && result.includes(",") == false && result.includes("-") == true) ||
-			(result.length == 11 && result.includes(",") == true && result.includes("-") == false) ||
-			(result.length == 12 && result.includes(",") == true && result.includes("-") == true)				//esto se puede manejar mejoor si pones qe solo se fije en el abs, te ahorras casos del or
-		){
-			error = false;
-		} else{
-			error = true;
-		}
-	} 
 	return error;
 }
 
 function cutDecimals(numberToCut){
 	let i = 10;
-	let newvalue = numberToCut;
-	while(Math.abs(newvalue).toString().length > 11){
-		newvalue = numberToCut.toFixed(i);
+	let newValue = numberToCut;
+	while(Math.abs(newValue).toString().length > 11){
+		newValue = numberToCut.toFixed(i);
 		i--;
 	}
 
-	let jesus = newvalue;
-	for(let i = newvalue.length-1; i >= 0; i-- ){
-		if(newvalue[i] == 0){
-			jesus = jesus.slice(0, jesus.length-1)
+	let fixedValue = newValue;
+	for(let i = newValue.length-1; i >= 0; i-- ){
+		if(newValue[i] == 0){
+			fixedValue = fixedValue.slice(0, fixedValue.length-1)
 		}
-		if(newvalue[i] == "."){
+		if(newValue[i] == "."){
 			break;
 		}
 	}
-	return replaceDot(jesus);
+	return replaceDot(fixedValue);
 }
