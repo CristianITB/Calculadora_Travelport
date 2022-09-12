@@ -13,8 +13,7 @@ document.addEventListener('keydown', (event) => {
 			if(!["+", "-", "*", "/"].includes(previousKey))
 			changeSign();
 		}
-	} else if((keyValue == "," || keyValue == "." || keyValue == "+" || keyValue == "-" || keyValue == "*" 
-				|| keyValue == "/" || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
+	} else if(([",", ".", "+", "-", "*", "/"].includes(keyValue) || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
 		takeValue(keyValue);
 	}
   }, false);
@@ -22,54 +21,52 @@ document.addEventListener('keydown', (event) => {
 var multipleOperation = false;
 var previousKey = "";
 
-function takeValue(x){
+function takeValue(userInput){
 	let display = document.getElementById('calculatorDisplay');
-	if((x >= 0 && x <= 9 || x == "," || x == ".") && (display.innerHTML != "ERROR")){
-		if(x != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
-			if(x != 0){
+	if(([",", "."].includes(userInput) || (userInput >= 0 && userInput <= 9)) && (display.innerHTML != "ERROR")){
+		if(userInput != "," && operatorSign == "" && (display.innerHTML == "0" || display.innerHTML == "NaN" || ((firstNumber == 0 && operatorSign == "" && secondNumber == 0)))){
+			if(userInput != 0){
 				removeComaHighlight();
 				removeChangeSignHighlight();
 				removeZeroHighlight();
-				firstNumber = x;
+				firstNumber = userInput;
 				display.innerHTML = "";
-				display.innerHTML += x;
+				display.innerHTML += userInput;
 			}
-		} else if(display.innerHTML.length <= 9 || (display.innerHTML.length == 10 && display.innerHTML.includes(",")) ||
-				 (display.innerHTML.length == 10 && display.innerHTML.includes("-")) || 
-				 (display.innerHTML.length == 11 && display.innerHTML.includes("-") && display.innerHTML.includes(","))){
-			if(x == "," || x == "."){
+		} else if((Math.abs(replaceComma(display.innerHTML))).toString().length <= 10 || (Math.abs(replaceComma(display.innerHTML))).toString().length <= 11 && display.innerHTML.includes(",")){
+			if(userInput == "," || userInput == "."){
 				addComa();
 			} else{
 				removeChangeSignHighlight();
 				removeZeroHighlight();
-				display.innerHTML += x;
+				display.innerHTML += userInput;
 			}
 		}
 		if(operatorSign != "" || multipleOperation == true){
-			getSecondValue(x);
+			getSecondValue(userInput);
 		}
 		checkLength();
 	} else{
-		operatorsManagement(x);
+		operatorsManagement(userInput);
 	}
-	previousKey = x;
+	previousKey = userInput;
 }
 
-function operatorsManagement(operatorValue){
+function operatorsManagement(userOperatorValue){
 	removeOperatorsHighlight();
-	document.getElementById(operatorValue).classList.add("highlightOperator");
+	document.getElementById(userOperatorValue).classList.add("highlightOperator");
 	if(operatorSign == ""){
-		getFirstvalue(operatorValue);
-	} else if(secondNumber != 0 || (((secondNumber == 0 && (operatorSign == "/" || operatorSign == "*") && operatorSign != previousKey)))){    //--> aquí está la clave de la solución 		
+		getFirstvalue(userOperatorValue);
+	} else if(secondNumber != 0 || (((secondNumber == 0 && ["/", "*"].includes(operatorSign) && operatorSign != previousKey)))){	
 		if(gotSecondValue == true){
-			calculateResult(operatorValue);
+			calculateResult(userOperatorValue);
 			multipleOperation = true;
-			operatorSign = operatorValue;
+			operatorSign = userOperatorValue;
 		} else{
 			displayError();
 		}
 	} else{
-		operatorSign = operatorValue;
+		operatorSign = userOperatorValue;
 	}
 	highlightChangeSign();
 }
@@ -125,9 +122,9 @@ function addComa(){
 function changeSign(){
 	let display = document.getElementById('calculatorDisplay');
 	if(display.innerHTML[display.innerHTML.length-1] == ","){
-		let value = display.innerHTML.slice(0, display.innerHTML.length-1)*-1
-		value += ",";
-		display.innerHTML = value;
+		let displayValue = display.innerHTML.slice(0, display.innerHTML.length-1)*-1;
+		displayValue += ",";
+		display.innerHTML = displayValue;
 	} else if(display.innerHTML.includes(",")){
 		let replacedDisplay = replaceComma(display.innerHTML);
 		replacedDisplay *= -1;
@@ -148,21 +145,17 @@ function replaceDot(valueToChange){
 	return replacedValue;
 }
 
-function clearDisplay(x){
+function clearDisplay(clearValue){
 	removeAllHighlights();
 	cleanTemporaryVars();
 	highlightZero();
 	highlightChangeSign();
-	document.getElementById('calculatorDisplay').innerHTML = x;
+	document.getElementById('calculatorDisplay').innerHTML = clearValue;
 }
 
 function checkLength(){
 	let display = document.getElementById('calculatorDisplay');
-	replaceComma(display.innerHTML)
-	if(
-		(Math.abs(display.innerHTML).toString().length == 10 && display.innerHTML.includes(",") == false) ||
-	    (Math.abs(replaceComma(display.innerHTML)).toString().length == 11 && display.innerHTML.includes(",") == true)
-	){
+	if((Math.abs(display.innerHTML).toString().length == 10 && display.innerHTML.includes(",") == false) || (Math.abs(replaceComma(display.innerHTML)).toString().length == 11 && display.innerHTML.includes(",") == true)){
 		highlightComma();
 		highlightNumbers();
 	}
@@ -258,11 +251,6 @@ var secondNumber = 0;
 
 function calculateResult(keyValue){	
 
-	if(secondNumber == 0 && operatorSign != ""){
-		removeOperatorsHighlight();
-		document.getElementById('calculatorDisplay').innerHTML = 0;
-	}
-
 	var operationResult = 0;
 	secondNumber = document.getElementById('calculatorDisplay').innerHTML;
 	
@@ -282,13 +270,7 @@ function calculateResult(keyValue){
 
 	if(operationResult.toString().includes(",")){
 		highlightComma();
-	} else{
-		if(Math.abs(operationResult).toString().length < 10 && document.getElementById('calculatorDisplay').innerHTML != "ERROR"){
-			removeComaHighlight();
-		} else{
-			highlightComma();
-		}
-	}
+	} 
 
 	if(keyValue != "="){
 		firstNumber = operationResult;
@@ -301,74 +283,46 @@ function calculateResult(keyValue){
 }
 
 function calculateSum(){
-	checkCommas();
-	let sum = (parseFloat(firstNumber) + parseFloat(secondNumber))
+	replaceCommasIfNeeded();
+	let sum = (parseFloat(firstNumber) + parseFloat(secondNumber));
 
-	if(sum.toString().includes(".")){
-		sum = replaceDot(sum.toString());
-	}
-
-	let errorCheck = checkResultLength(sum);  //errorCheck can be a Boolean or the number with the decimals cut; JavaScript advantatges.
-
-	interpretateError(errorCheck, sum);
+	checkResultLength(sum);
 	return sum;
 }
 
 function calculateSubtraction(){
-	checkCommas();
+	replaceCommasIfNeeded();
 	let substraction = (parseFloat(firstNumber) - parseFloat(secondNumber))
 
-	if(substraction.toString().includes(".")){
-		substraction = replaceDot(substraction.toString());
-	}
-
-	let errorCheck = checkResultLength(substraction);
-
-	interpretateError(errorCheck, substraction);
+	checkResultLength(substraction);
 	return substraction;
 }
 
 function calculateMultiplication(){
-	checkCommas();
+	replaceCommasIfNeeded();
 	let mult = parseFloat(firstNumber) * parseFloat(secondNumber);
 
-	if(mult.toString().includes(".")){
-		mult = replaceDot(mult.toString());
-	}
-
-	let errorCheck = checkResultLength(mult);
-
-	interpretateError(errorCheck, mult);
+	checkResultLength(mult);
 	return mult;
 }
 
 function calculateDivision(){
-	checkCommas();
+	replaceCommasIfNeeded();
 	let div = parseFloat(firstNumber) / parseFloat(secondNumber);
 
-	if(div.toString().includes(".")){
-		div = replaceDot(div.toString());
-	}
-
-	let errorCheck = checkResultLength(div);
-
-	if(secondNumber == 0){
-		errorCheck = true;
-	}
-
-	interpretateError(errorCheck, div);
+	checkResultLength(div);
 	return div;
 }
 
 function interpretateError(errorCheck, operationResult){
-	if(errorCheck != true){
+	if(errorCheck == true){
+		displayError();
+	} else{
 		if(errorCheck != false){
 			operationResult = errorCheck;
 		}
 		document.getElementById('calculatorDisplay').innerHTML = operationResult;
-	} else{
-		displayError();
-	} 
+	}
 }
 
 function cleanTemporaryVars(){
@@ -385,7 +339,7 @@ function displayError(){
 	highlightNumbers();
 }
 
-function checkCommas(){
+function replaceCommasIfNeeded(){
 	if(firstNumber.toString().includes(",")){
 		firstNumber = replaceComma(firstNumber);
 	}
@@ -403,13 +357,21 @@ function checkResultLength(result){
 
 	if(Math.abs(result).toString().length <= 10 || (Math.abs(result).toString().length == 11 && result.toString().includes("."))){
 		error = false;
+	} else if (Math.abs(result).toString().length >= 11 && !result.toString().includes(".")){
+		error = true;
 	} else if(Math.abs(result).toString().length > 11 && result.toString().includes(".")){
-		return cutDecimals(result);
-	} else if (Math.abs(result).toString().length >= 11 && result.toString().includes(".") == false){
+		result = cutDecimals(result);
+	} 
+
+	if(secondNumber == 0 && operatorSign == "/"){
 		error = true;
 	}
 
-	return error;
+	if(result.toString().includes(".")){
+		result = replaceDot(result.toString());
+	}
+
+	interpretateError(error, result)
 }
 
 function cutDecimals(numberToCut){
