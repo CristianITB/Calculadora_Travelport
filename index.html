@@ -9,7 +9,7 @@
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<script src="src/Scripts/calculator.js"></script>
 	</head>
-	<body>
+	<body onkeyup="keyPress(event)">
 		<header>
 			<h1>Project: <span>Calculator</span></h1>
 		</header>
@@ -23,7 +23,7 @@
 			<!--
 			<input type="button" id="one" value="1" onclick="takeValue(this.value)">  -> It could be typed this way too
 			-->
-			<button id="one" class="numbers" value="1" data-testid="1" onclick="takeValue(document.getElementById('one').value)">1</button>
+			<button id="one" class="numbers" value="1" data-testid="1" onclick="takeValue(this.value)">1</button>
 			<button id="two" class="numbers" value="2" data-testid="2" onclick="takeValue(document.getElementById('two').value)">2</button>
 			<button id="three" class="numbers" value="3" data-testid="3" onclick="takeValue(document.getElementById('three').value)">3</button>
 			<button class="operators" value="+" id="+" data-testid="+" onclick="highlightOperator(event), takeValue(this.value)">+</button>

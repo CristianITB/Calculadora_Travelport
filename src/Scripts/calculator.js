@@ -1,4 +1,15 @@
-document.addEventListener('keydown', (event) => {
+// const
+// vars globals
+var multipleOperation = false;
+var previousKey = "";
+// codi incial -> Crida a les funcions que setegen l'entorn
+// setKeyboardEvents
+// setMouseEvents
+// reset
+
+// funcions
+
+function keyPress(event) {
 	var keyValue = event.key;
 	event.preventDefault();
 
@@ -8,18 +19,13 @@ document.addEventListener('keydown', (event) => {
 		clearDisplay("0");		
 	} else if(keyValue == "Enter"){
 		ableToCalculate();
-	} else if(keyValue == "Control"){
-		if (currentDisplay != "ERROR"){
-			if(!["+", "-", "*", "/"].includes(previousKey))
-			changeSign();
-		}
+	} else if(keyValue == "Control" && currentDisplay != "ERROR"){
+		if(!["+", "-", "*", "/"].includes(previousKey))
+		changeSign();
 	} else if(([",", ".", "+", "-", "*", "/"].includes(keyValue) || (keyValue >= 0 && keyValue <= 9)) && currentDisplay != "ERROR"){
 		takeValue(keyValue);
 	}
-  }, false);
-
-var multipleOperation = false;
-var previousKey = "";
+  }
 
 function takeValue(userInput){
 	let display = document.getElementById('calculatorDisplay');
